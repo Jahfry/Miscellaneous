@@ -126,9 +126,9 @@ We can unbind the GPU from the host via the following 2 commands.
 
 ## Problem 2: TrueNAS still thinks the host owns the GPU
 
-Technically the GPU is now available to be bound to a GPU. But ... if you want to use the TrueNAS UI to set up said VM ... it will still give all the same errors we saw at the beginning of this file. 
+Technically the GPU is now available to be bound to a GPU. But ... if you want to use the TrueNAS UI to set up said VM ... it will still give all the same errors we saw in "Problem #1b" above. 
 
-This is the point at which iX (or someone more familiar with TNS than me) will need to modify the UI. 
+This is the point at which iX (or someone more familiar with TNS than me) will need to modify the UI to understand the concept of the host not being attached to the GPU. 
 
 
 
