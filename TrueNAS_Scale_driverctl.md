@@ -1,6 +1,6 @@
 # TrueNAS Scale and Passing Through a Single GPU
 
-*** IMPORTANT: This doesn't (yet?) work ***
+***IMPORTANT: This doesn't (yet?) work***
 
 TrueNAS Scale (abbreviated below as 'TNS') is a new (this was written 4/8/2022) Debian Linux-based version of TrueNAS with some really nice functionality around VMs. 
 
