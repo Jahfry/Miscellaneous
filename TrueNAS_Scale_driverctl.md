@@ -26,11 +26,17 @@ I'm probably going back to Proxmox for now. Which is fine, I'm not saying that i
 
 
 ---
+**More rambling:**
 
 There's really "only" 1 more Debian package that TrueNAS needs to make passing through single GPUs (driverctl). All of the other commands needed already exist on TrueNAS Scale's default install. BUT ... the UI also needs some architecture to support it. 
 
 *(I said "single GPU" a bunch of times here. I do have 2 GPUs, but the intent is to have both used by 2 different VMs at once time. Dedicating one to the console video is just more than I want to give up.)*
 
+The rest of this was written as a hopeful how-to so the tone changes. One important note is:
+
+**If iX does decide to support single GPU VM passthrough, none of the following is necessary, especially the part about '`apt`'.**
+
+---
 
 In an ***ideal*** world, the UI would understand how to use `driverctl` such that the UI could bind to it for boot. Then, once booted, give the user the option to use the GPU on a VM (using `driverctl` to unbind the GPU, possibly when the VM is being fired up). It could print a message to the console prior to detaching the GPU so that there is a reminder on the console video like 'GPU currently detached for use with X' (X being a VM, a container, etc). Then if/when the VM is shut down, the UI process could rebind the console to the GPU. 
 
