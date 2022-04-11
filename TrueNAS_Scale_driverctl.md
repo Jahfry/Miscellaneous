@@ -203,8 +203,6 @@ service nginx restart
 
 ## Setup a Windows VM 
 
-This isn't strictly necessary if everything later on works. But, it makes sure you have a different way to view your VM desktop after removing the VNC display if the passthrough doesn't work the first time. 
-
 I'm not going to document *everything* about this process. There are some videos on Youtube that cover the TNS UI for Virtualization. But I will make some notes on how I did it. 
 
 **IMPORTANT:** I'm writing these instructions using a Nvidia GTX 1060. Things may go a bit differently if you're on AMD. 
@@ -236,6 +234,7 @@ Or name it something VERY short (like "1", "2", etc) when first creating the VM 
 	* Click on for 'Enable Remote Desktop'
 * Take note of the IP your VM has by opening a 'cmd' window on it and doing `ipconfig`, noting the 'IPv4 Address'
 * Connect to that IP from another machine using Remote Desktop (RDP)
+    * This isn't strictly necessary if everything later on works. But, it makes sure you have a different way to view your VM desktop after removing the VNC display if the passthrough doesn't work (but it does need to successfully boot, something I had problems with)
     * From another Win10/Win11 machine just run 'Remote Desktop Connection'
 	* Put the IP of your VM from previous step in the address
 	* If you need to change the username (maybe 1 machine has a local account but the other has a Microsoft account), click 'More Choices' > 'Use a Different Account'
