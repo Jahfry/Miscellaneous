@@ -286,7 +286,7 @@ Or name it something VERY short (like "1", "2", etc) when first creating the VM 
 
 ## This is where I paused to consider my life choices
 
-* At this stage, my VM can boot if it has the GPU attached as long as it also has a VNC output. 
+* my VM can boot if it has the GPU attached as long as it also has a VNC output. 
 * Device Manager shows code 31 on the GPU until the nvidia driver is installed
 * After installing the nvidia driver on the VM the code 31 goes away and code 43 doesn't appear
 * Removing the VNC adapter and starting the VM results in never getting the system to boot
