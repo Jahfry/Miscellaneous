@@ -54,6 +54,7 @@ I'm debating internally about whether I stick with TNS at this point or go back 
 * Binding a isolating a single GPU
 * Attaching that GPU to a Windows VM
 * Installing the nvidia driver and having Windows report that the adapter is working (no code 31 or 43)
+* Repeated this entire process 2 more times on fresh installs to make sure my UI hacks worked solidly
 
 My assumption is that the missing parts will revolve around GPU BIOS (romfile paramater). 
 
