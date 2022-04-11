@@ -110,16 +110,7 @@ cp /usr/lib/python3/dist-packages/middlewared/plugins/system_advanced/config.py 
 
 ## Edit the UI to prevent the error regarding needing 1 GPU for the host
 
-What are we doing?
-
-* The sections in these 4 files are what the TNS UI will use to validate when you try to select a GPU to isolate
-* These files are all minified (all of the code is on a single line), so I've given easy commands to edit the files
-* The change is always the "if()" that contains the text "1 GPU" (the if() happens before "1 GPU", but you can search for that text and backtrack). 
-* Change the if() condition from "greater than or equal" (ie, >=) to "greater than" (ie, >). 
-* Each file has a different syntax in the "if()", hence the need for 4 different edits
-* **IMPORTANT:** replacements in the last 2 files below happen in 2 places, identically. So don't just replace the first (the |g in the commands handles this if pasting the perl commands)
-
-*These commands will edit the files for you:*
+*These commands will edit 4 of the 5 files for you:*
 
 ```
 perl -i -pe 's|\Qif([...t].length>=(null===(i=this.availableGpus)\E|if([...t].length>(null===(i=this.availableGpus)|g' /usr/share/truenas/webui/609-es2015.f059fa779e0b83eaa150.js
@@ -128,6 +119,14 @@ perl -i -pe 's|\Q{name:"gpus"});if(i.length&&i.length>=o.options.length)\E|{name
 perl -i -pe 's|\Q{name:"gpus"});if(r.length&&r.length>=c.options.length)\E|{name:"gpus"});if(r.length&&r.length>c.options.length)|g' /usr/share/truenas/webui/715-es5.b3b1eb8aed99ad4e4035.js
 
 ```
+What are we doing?
+
+* The sections in these 4 files are what the TNS UI will use to validate when you try to select a GPU to isolate
+* These files are all minified (all of the code is on a single line), so I've given easy commands to edit the files
+* The change is always the "if()" that contains the text "1 GPU" (the if() happens before "1 GPU", but you can search for that text and backtrack). 
+* Change the if() condition from "greater than or equal" (ie, >=) to "greater than" (ie, >). 
+* Each file has a different syntax in the "if()", hence the need for 4 different edits
+* **IMPORTANT:** replacements in the last 2 files below happen in 2 places, identically. So don't just replace the first (the |g in the commands handles this if pasting the perl commands)
 
 *Or if you want to do it yourself:* 
 
@@ -148,7 +147,9 @@ perl -i -pe 's|\Q{name:"gpus"});if(r.length&&r.length>=c.options.length)\E|{name
 		* `{name:"gpus"});if(r.length&&r.length>c.options.length)` (edited)
 		
 
-There is 1 more file you need to edit. This file is used to validate the GPU selection -after- you've successfully submitted the form with the "Save" button. 
+*There is 1 more file you need to edit.*
+
+This file is used to validate the GPU selection -after- you've successfully submitted the form with the "Save" button. 
 
 '/usr/lib/python3/dist-packages/middlewared/plugins/system_advanced/config.py'
 
