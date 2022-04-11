@@ -321,9 +321,9 @@ blacklist snd_hda_intel
 
 ## IOMMU additional apps
 
-* These are both optional things, feel free to skip them until you need them.* 
-
+* These are both optional things, feel free to skip them until you need them.
 * Create a script called 'iommu-list' with the following contents
+
 ```
 #!/bin/bash
 # iommu-list
@@ -335,9 +335,9 @@ for g in `find /sys/kernel/iommu_groups/* -maxdepth 0 -type d | sort -V`; do
     done;
 done;
 ```
-    * `chmod +x iommu-list`
-	* run `iommu-list` to get a breakdown of your IOMMU groups and make sure IOMMU is working for you. 
-	* A snippet of the output on my system showing the important group for my GPU (there will be many more entries):
+* `chmod +x iommu-list`
+    *run `iommu-list` to get a breakdown of your IOMMU groups and make sure IOMMU is working for you. 
+    * A snippet of the output on my system showing the important group for my GPU (there will be many more entries):
 
 <pre>
 [snip]
@@ -372,7 +372,7 @@ IOMMU Group 27:
 
 TrueNAS features wanted:
 
-* Supported single GPU passthrough
+* Supported single GPU passthrough, possibly using something dynamic like driverctl
 * GPU ROM file UI
 * More consistent UI between initial VM setup and later editing of options (example: create with VNC display, deleting it is in a different UI paradigm, and then how would you re-add it later?)
 * CPU Pinning
