@@ -12,8 +12,6 @@ The black screen may not have been a problem with needing a rom file, it might b
 
 I really like the TrueNAS Scale product. If they enhance the passthrough VM support in the future I'll definitely take another look. For many people it may "just work", and for others they may not have the same needs. 
 
-I'm going to toss in a second GPU just to see if I can get TrueNAS working with my 1060 as a second GPU without mess, and I'll report the findings here, but after that test I'll be moving on from TrueNAS Scale until there's changes on this feature. 
-
 ---
 
 ## Things I'd like to see in a future TrueNAS Scale release:
