@@ -209,7 +209,9 @@ I'm not going to document *everything* about this process. There are some videos
 
 **IMPORTANT:** I'm writing these instructions using a Nvidia GTX 1060. Things may go a bit differently if you're on AMD. 
 
-### *Naming note:* Don't to make your VM name very long. For example I named mine "Windows_10_Pro_64bit_MASTER" to be descriptive. The problem you can run into is, even if the name fits the character limit, you may later want to clone the VM to test something else. And you can then run into the max 63 character file name on TNS. The character limit includes the path (zvol, dataset, directory name, etc). 
+### *Naming note:* Don't to make your VM name very long. 
+
+For example I named mine "Windows_10_Pro_64bit_MASTER" to be descriptive. The problem you can run into is, even if the name fits the character limit, you may later want to clone the VM to test something else. And you can then run into the max 63 character file name on TNS. The character limit includes the path (zvol, dataset, directory name, etc). 
 
 When I try to clone my first VM with a name more than a couple of characters, I get this error if the name is more than 3 characters:
 
