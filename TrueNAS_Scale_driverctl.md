@@ -43,7 +43,7 @@ I hacked the TrueNAS UI to allow isolation of a single GPU.
 But ... 
 
 
-***BIG MASSIVE WARNING:** **I didn't get to the point where I had passthrough actually working in bringing up a video output on my Windows VM**. 
+***BIG MASSIVE WARNING:*** **I didn't get to the point where I had passthrough actually working in bringing up a video output on my Windows VM**. 
 
 That warning isn't big and massive because I don't think my UI hack worked. I'm sure it did. But what I haven't done up to this point is actually finish the process of making video output work on the VM (the VM does bind and allow driver installs for the GPU). 
 
