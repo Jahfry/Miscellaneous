@@ -1,5 +1,18 @@
 # TrueNAS Scale 22.02 and Passing Through a Single GPU
 
+Note: this will be mentioned again in the mass of text below, but following this page *will not get you a working single GPU passthrough*. 
+
+I got a long way into it working, even to the point of no errors on the GPU device in Windows, but I did not get video output working. Ie, I still had a black screen. 
+
+The breaking point was this ... I -think- I may need to pass a vBIOS rom file to the qemu machine. TrueNAS Scale's UI doesn't support rom files. Which probably has you thinking "just edit the /etc/libvrt/qemu config file for that". But, even when not editing the VM config in the TrueNAS UI, just starting the VM overwrites the changes to the config file. 
+
+This is a common issue with UIs that try to simplify everything but that don't present advanced options for everything. I've fought this many times before on many other products. The UI treats everything it knows as canonical and overwrites many manual edits. 
+
+The black screen may not have been a problem with needing a rom file, it might be something else, but it's becoming too much of a hassle fighting things to figure it out. 
+
+I really like the TrueNAS Scale product. If they enhance the passthrough VM support in the future I'll definitely take another look. For many people it may "just work", and for others they may not have the same needs. 
+
+I'm going to toss in a second GPU just to see if I can get TrueNAS working with my 1060 as a second GPU without mess, and I'll report the findings here, but after that test I'll be moving on from TrueNAS Scale until there's changes on this feature. 
 
 **Background**
 TrueNAS Scale (abbreviated below as 'TNS') is a new (v22.02, this was written 4/8/2022) Debian Linux-based version of TrueNAS with some really nice functionality around VMs. 
