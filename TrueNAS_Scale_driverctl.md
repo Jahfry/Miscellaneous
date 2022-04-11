@@ -118,6 +118,21 @@ What are we doing?
 * Change the if() condition from "greater than or equal" (ie, >=) to "greater than" (ie, >). 
 * Each file has a different syntax in the "if()", hence the need for 4 different edits
 * **IMPORTANT:** replacements in the last 2 files below happen in 2 places, identically. So don't just replace the first (the |g in the commands handles this if pasting the perl commands)
+
+*These commands will edit the files for you:*
+
+```
+perl -i -pe 's|\Qif([...t].length>=(null===(i=this.availableGpus)\E|if([...t].length>(null===(i=this.availableGpus)|g' /usr/share/truenas/webui/609-es2015.f059fa779e0b83eaa150.js
+perl -i -pe 's|\Qif(t(a).length>=(null===(o=e.availableGpus)\E|if(t(a).length>(null===(o=e.availableGpus)|g' /usr/share/truenas/webui/609-es5.f059fa779e0b83eaa150.js
+perl -i -pe 's|\Q{name:"gpus"});if(i.length&&i.length>=o.options.length)\E|{name:"gpus"});if(i.length&&i.length>o.options.length)|g' /usr/share/truenas/webui/715-es2015.b3b1eb8aed99ad4e4035.js
+perl -i -pe 's|\Q{name:"gpus"});if(r.length&&r.length>=c.options.length)\E|{name:"gpus"});if(r.length&&r.length>c.options.length)|g' /usr/share/truenas/webui/715-es5.b3b1eb8aed99ad4e4035.js
+
+```
+
+*Or if you want to do it yourself:* 
+
+(no need to both run the commands above and do these edits, they are identical, just documenting what the commands do)
+
 * Specific list of replacements, per file:
     * '/usr/share/truenas/webui/609-es2015.f059fa779e0b83eaa150.js'
 	    * `if([...t].length>=(null===(i=this.availableGpus)` (original)
@@ -132,13 +147,6 @@ What are we doing?
 	    * `{name:"gpus"});if(r.length&&r.length>=c.options.length)` (original)
 		* `{name:"gpus"});if(r.length&&r.length>c.options.length)` (edited)
 		
-```
-perl -i -pe 's|\Qif([...t].length>=(null===(i=this.availableGpus)\E|if([...t].length>(null===(i=this.availableGpus)|g' /usr/share/truenas/webui/609-es2015.f059fa779e0b83eaa150.js
-perl -i -pe 's|\Qif(t(a).length>=(null===(o=e.availableGpus)\E|if(t(a).length>(null===(o=e.availableGpus)|g' /usr/share/truenas/webui/609-es5.f059fa779e0b83eaa150.js
-perl -i -pe 's|\Q{name:"gpus"});if(i.length&&i.length>=o.options.length)\E|{name:"gpus"});if(i.length&&i.length>o.options.length)|g' /usr/share/truenas/webui/715-es2015.b3b1eb8aed99ad4e4035.js
-perl -i -pe 's|\Q{name:"gpus"});if(r.length&&r.length>=c.options.length)\E|{name:"gpus"});if(r.length&&r.length>c.options.length)|g' /usr/share/truenas/webui/715-es5.b3b1eb8aed99ad4e4035.js
-
-```
 
 There is 1 more file you need to edit. This file is used to validate the GPU selection -after- you've successfully submitted the form with the "Save" button. 
 
