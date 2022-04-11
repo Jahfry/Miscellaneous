@@ -14,6 +14,23 @@ I really like the TrueNAS Scale product. If they enhance the passthrough VM supp
 
 I'm going to toss in a second GPU just to see if I can get TrueNAS working with my 1060 as a second GPU without mess, and I'll report the findings here, but after that test I'll be moving on from TrueNAS Scale until there's changes on this feature. 
 
+---
+
+## Things I'd like to see in a future TrueNAS Scale release:
+
+TrueNAS features wanted:
+
+* Supported single GPU passthrough, possibly using something dynamic like driverctl
+* GPU ROM file UI
+* More consistent UI between initial VM setup and later editing of options (example: create with VNC display, deleting it is in a different UI paradigm, and then how would you re-add it later?)
+* CPU Pinning
+* Support for changing linux swappiness
+* "Notes" notepad on each major item like individual VMs, Applications, Groups, pools. Meta data so that we can keep notes directly in the UI. 
+
+I really think TNS has the capability to embrace the VM/homelab space. That wasn't the original direction of TrueNAS/FreeNAS, but, if they want to expand market share into this realm they're well on the way. I'm likely the one at fault for trying to do more than TNS intended. But I also feel that the Passthrough concept is closer-enough to mainstream that with some tweaks TNS could really shine there. 
+
+---
+
 **Background**
 TrueNAS Scale (abbreviated below as 'TNS') is a new (v22.02, this was written 4/8/2022) Debian Linux-based version of TrueNAS with some really nice functionality around VMs. 
 
@@ -390,16 +407,40 @@ IOMMU Group 27:
 
 ---
 
-## Things I'd like to see in a future TrueNAS Scale release:
+## Additional notes and pointers
 
-TrueNAS features wanted:
+Just making a few extra notes as breadcrumbs for the next time I'm poking around:
 
-* Supported single GPU passthrough, possibly using something dynamic like driverctl
-* GPU ROM file UI
-* More consistent UI between initial VM setup and later editing of options (example: create with VNC display, deleting it is in a different UI paradigm, and then how would you re-add it later?)
-* CPU Pinning
-* Support for changing linux swappiness
-* "Notes" notepad on each major item like individual VMs, Applications, Groups, pools. Meta data so that we can keep notes directly in the UI. 
+1) With a default configuration the VM can't see SMB shares on the host. To fix that:
 
-I really think TNS has the capability to embrace the VM/homelab space. That wasn't the original direction of TrueNAS/FreeNAS, but, if they want to expand market share into this realm they're well on the way. I'm likely the one at fault for trying to do more than TNS intended. But I also feel that the Passthrough concept is closer-enough to mainstream that with some tweaks TNS could really shine there. 
+Bridging the VM (so it can access TNS shares)
 
+* Remove the IP from the interface to be used
+    ... I have 2 interfaces, enp7s0 (2.5Gbs) and enp6s0 (1Gbs)
+	* Removed the IP from enp6s0
+	* enp7s0 is DHCP client
+	* Create a bridge
+	    * name: br0
+		* DHCP unchecked
+		* Bridge Members: enp6s0
+		* IP Addresses: [use what was on enp6s0]
+		* Apply
+		* Save
+		* verify connectivity to enp7s0 and br0 IPs with ping
+
+* My GPU: [Gigabyte GTX 1060 6GB Mini-ITX OC](https://www.techpowerup.com/vgabios/187094/gigabyte-gtx1060-6144-160804)
+* Nvidia Driver install has to happen after device attached
+* To dump a copy of the GPU rom 
+    * change the path/name of the .rom file to match yours
+    * Using this method, instead of dumping your vbios with GPU-Z or downloading from a site like TechPowerUp, should mean you don't need to worry about stripping the nvidia header from the rom. However if you did need to get a .rom in a different manner, there is [information here](https://csandvik.com/unraid-windows-vm/) that may help you do the hexedit. 
+
+```
+echo 1 > /sys/bus/pci/devices/0000:0b:00.0/rom
+cat /sys/bus/pci/devices/0000:0b:00.0/rom > /mnt/xfer/isos/windows/support/gpu-roms/gtx_1060_6gb_gigabyte_mini-itx_oc.rom
+echo 0 > /sys/bus/pci/devices/0000:0b:00.0/rom
+```
+
+* I tried to append " disable_vga=1" to the top line in /etc/modprobe.d/vfio.conf ... no help
+* qemu configurations are stored in /etc/libvirt/qemu
+    * but ... any changes you make to the config are overwritten by the UI before the VM is started up (dealbreaker for me)
+    
