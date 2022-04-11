@@ -1,4 +1,4 @@
-# TrueNAS Scale and Passing Through a Single GPU
+# TrueNAS Scale 22.02 and Passing Through a Single GPU
 
 
 **Background**
