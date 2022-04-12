@@ -15,4 +15,4 @@
 > 
 > \> NEXT: [03 - Replace Me](03.ReplaceMe.md)
 >
-> \< PREV: [01 - Hardware](02.Hardware.md)
+> \< PREV: [01 - Hardware](01.Hardware.md)
