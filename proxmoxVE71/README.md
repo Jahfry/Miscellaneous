@@ -1,3 +1,9 @@
+# Proxmox VE 7.1 NAS & Gaming VMs - 00 - Introduction
+---
+## Contents:
+> **Hint:** Github has a drop-down automatic TOC, find the **≡** icon on the top-left
+
+
 **file in progress ... don't use this ... probably don't even read it yet**
 
 I'm posting this for 3 reasons:
@@ -10,3 +16,14 @@ I'm posting this for 3 reasons:
 
 I'm using Proxmox VE 7.1 to then run multiple VMs and containers. 
 
+# Contents:
+
+* [01. Hardware](01.Hardware.md)
+    + Component list
+    + RAM Timings
+
+
+---
+> [^ [TOP OF PAGE](#proxmox-ve-7.1-nas-and-gaming-vms---00---introduction)] ... ***End:*** *00 - Proxmox VE 7.1 NAS & Gaming VMs*
+> 
+> \> NEXT: [01 - Hardware](01.Hardware.md)
