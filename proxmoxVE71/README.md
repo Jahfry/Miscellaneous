@@ -1,4 +1,4 @@
-# Proxmox VE 7.1 NAS & Gaming VMs - 00 - Introduction
+# Proxmox VE 7.1 NAS and Gaming VMs - 00 - Introduction
 
 ***file in progress ... don't use this ... probably don't even read it yet***
 
