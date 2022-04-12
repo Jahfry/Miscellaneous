@@ -25,6 +25,6 @@ I'm posting is for 3 reasons:
     + Post-install tweaks
 
 ---
-> [^ [TOP OF PAGE](#proxmox-ve-7.1-nas-and-gaming-vms---00---introduction)] ... ***End:*** *00 - Proxmox VE 7.1 NAS & Gaming VMs*
+> [^ [TOP OF PAGE](#proxmox-ve-7.1-nas-and-gaming-vms---00---introduction)] ... ***End:*** *Proxmox VE 7.1 NAS and Gaming VMs - 00 - Introduction*
 > 
 > \> NEXT: [01 - Hardware](01.Hardware.md)
