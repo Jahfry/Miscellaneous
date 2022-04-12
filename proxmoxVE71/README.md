@@ -1,0 +1,123 @@
+**file in progress ... don't use this ... probably don't even read it yet**
+
+I'm posting this for 3 reasons:
+
+* Log what I did in case I need to redo the install later
+* Have something others can sanity check for me
+* If it's sane, allow other folks to use it like a guide
+
+# Background:
+
+I'm using Proxmox VE 7.1 to then run multiple VMs and containers. 
+
+## Hardware in use:
+
+* Motherboard - 'Gigabyte Aorus X570 Master rev 1' [link](https://www.gigabyte.com/us/Motherboard/X570-AORUS-MASTER-rev-10) ... **not** X570S
+    + BIOS version F346b
+    + Important BIOS Settings
+        - Disable CSM
+        - Enable SVM (Virtualization)
+        - Tune memory as desired (***get it stable, see RAM below***)
+    + Added a 4-port USB backplate to the open USB2 header for giving more USB to VMs
+* CPU - 'AMD 5950X'
+* RAM - 4 x Kingston 32MB **ECC** DDR4 @ *3600* 'KSM32ED8/32ME'
+    + Timing and heat spreader information in bottom section
+* Motherboard M.2 drives
+    + M2A (Top, CPU): [empty ... reserving for gen4 NVME later]
+    + M2B (middle, chipset): NVME 1TB `ADATA Technology Co., Ltd. XPG SX8200 Pro PCIe Gen3x4 M.2 2280`
+    + M2C (bottom, chipset): [empty ... if NVME (not SATA SSD) is used here it blocks SATA3 4 & 5]
+* Motherboard SATA ports
+    + HD: 2 x Seagate green 5400rpm 4TB (scratch disks for moving data, temp backups, etc)
+    + SSD: 2 x 'Samsung EVO 860 1TB' (used for VM and Container storage)
+    + SSD: 1 x 'Samsung EVO 850 512GB' (used for Host boot drive)
+* HBA - 'LSISAS2008' in IT mode
+    + FWVersion(20.00.07.00)
+    + ChipRevision(0x03)
+    + BiosVersion(07.39.02.00)
+    + HD: 2 x HGST 8TB 7200RPM
+    + HD: 2 x WD Red 5400RPM
+    + HD: 4 x open slots for future (probably moving the 2x 4TB drives to HBA and adding 2 more 8TB)
+* GPU1 - 'Nvidia RTX 3080ti Founders Edition 12GB'
+* GPU2 - 'Gigabyte GTX 1060 6GB'
+* PSU - 'Be Quiet Dark Power Pro 12 1500w' (overkill BUT allows overhead and bigger GPU2 later)
+* Case - 'Be Quiet Dark Base 900 rev 1' (with 900 Pro front IO, adds USB-C, changes USB2.0 to charger-only)
+* Monitors (just FYI)
+    + 'Dell AW3821DW' (38" 3800x1600) - 2020 - center / bottom
+    + 'Dell U3011' (30" 2560x1600) - 2011 - center / top
+    + 2 x 'Dell 2007FP' (20" 1600x1200 portrait) - 2007 - sides / bottom
+
+## RAM Timings
+
+**NOTE:** ***This is VERY optional***. If you decide to do this, make sure your system is VERY stable before doing anything else. 
+
+These timings worked on MY sticks with days of trial and error. I found other users with the same sticks and we all ended up with slightly different best stable speeds (one person managed 3800, rest seemed to max at 3600, likely due to motherboard differences). And we all ended up needing slightly different timings and voltage to get things stable. 
+
+Speaking of voltage, if you're going to up it (and you'll need to if you want to OC above the stock 3200), get heat spreaders. With the heat spreaders I have at <>1.4v on the RAM I don't see over 50C even with long term high workloads. Make sure there is some airflow over your RAM. 
+
+Since the RAM already runs at 3200, if you're worried about stability, just used the JEDEC defaults. 
+
+* This ECC RAM has **no XMPP profile**, things like the Ryzen DRAM calculator have no benefit.
+* Even if you use the same model, your timings may need to be different.
+* **IMPORTANT:** be aware that the 5950X is ***only rated for DDR2667*** with **4 sticks** of RAM
+    - *If you're doing memory intense usage then consider leaving your RAM at lower timings* ***OR*** *only use 2 sticks, limiting you to 64GB*
+    - In my stability testing over a few days I encountered no errors with ECC disabled, so even if a few occur over a long time ECC should correct them ... I wanted the faster gaming VM performance.
+* **Do a LOT of stability testing** ... For memory testing my PC was still running Windows but also tested under Linux (Unraid's memory test) and then with many *weeks* of various usage, ***but nothing very stressful yet***.
+    + I'm not a memory stability expert, so I'm not going to 'guide' that much. Below are what I used on Windows to test along with other stuff like 'Memtest86+' (if using that on a live USB, you may need to disable EFI booting temporarily). 
+    + Initial testing was with PassMark MemTest86 using their .iso on USB. Once I had that passing I ran some other tests. I found that one of the best long-run stability tests was actually to install TrueNAS Scale and do a very large file copy (8TB of mixed content ranging from 1K files up to 20GB+ movies). Doing this had ZFS constantly using the RAM for caching. I caught a number of crashes getting this to work where just running the system normally wouldn't crash at all. You might consider doing a test if you don't already have a better test. 
+    + I'm leaving it up to you to find tools to verify your specific overlock, but one tool I found VERY useful if you can run a Windows install:
+        - Windows: '[OCCT](https://www.ocbase.com/)' ...  as a host OS and I grabbed OCCT. I found it valuable enough to pay for a month of use but you can use it free. 
+        - Windows: 'HWinfo64' ... ran during tests to make sure my memory temps weren't crazy with increased voltage
+        - Windows: I made sure that now WHEA errors were in the Event Viewer during the above tests before considering it stable, both with ECC enabled but more importantly with ECC ***disabled*** in the BIOS during long tests (to keep ECC from hiding any errors). 
+    + UPDATE: After a few months I redid my system and found with a newer BIOS the RAM was no longer stable with my original timings and voltage. The list below is my *current* settings.
+
+
+If you're going to mess with your memory at this point, you may be putting the rest of the guide down for while until done, but I would recommend getting to what you're happy with before bothering with a lot of system configuration.
+
+Since I'm putting more voltage into these, I added thick aluminum heat spreaders 
+        - Same as what would come with the Barrow RAMWBT-PA water cooling kit
+        - I bought the spreaders by themselves from Amazon and they were of a good quality ... if you're looking for them they look like this: ![Barrow RAM heat spreader](assets/RAM_heat_spreaders_barrow.jpg)
+
+### My actual 'final' memory timings:
+
+'Final' is quoted because I have found that, with these timings and PBO Enabled, I'm not seeing great boost behavior in a bare metal Windows system. It's not awful but not great. I'll be revisiting my BIOS settings (when I upgrade to a new BIOS) at a future time and if I update stuff I'll post here. *Are overclocks ever really final?*
+
+**Go into BIOS configuration:**
+
+* press [DEL] on the first screen
+* if you accidentally made it to the Dracut menu screen: select the 2nd row 'Reboot to Computer Setup Utility' option and it will reboot to BIOS config
+* *If you're in 'Easy Mode', switch to 'Advanced' with [F2]**
+* If your BIOS UI is very laggy and it bugs you, press [CONTROL+ALT+F6] to set to a lower resolution. It will be blurrier but much faster if doing a lot of navigation. This may only happen if you disable 'CSM' during the steps below. 
+* 'System Info.' > 'BIOS Version'
+    + *I'm running on BIOS F34 right now, anything from F11 to F35b should work.*
+    + F35b (not yet updated to that) makes note of memory improvements so you may want to look at it or newer when available. 
+    + F10 and earlier had problems for VFIO. 
+        - If you're on F10 or earlier please upgrade your BIOS first (*make sure to remember any memory timings/etc you want to keep*)
+        - This should also apply to many other Aorus X570 boards as they seem to have similar BIOS revision numbers. 
+        - I can only say that F34 has been stable for me.
+* 'Tweaker'
+    + 'System Memory Multiplier' = **36.00**
+        - Using a small 32GB (2 x 16GB) Micron E-Die kit, I can get my 5950x to 3800 UCLK without a sweat, but the RAM here was never able to be usable above 3600. That's actually pretty decent given the JEDEC speed of this RAM is 3200 (which is the fastest ECC I've found)
+    + 'FCLK Frequency' = **Auto**
+    + 'UCLK Mode' = **UCLK--MEMCLK**
+    + 'DRAM Voltage  (CH A/B)' = **1.350V**
+        - default is **1.2V**. 1.350 should be long-term safe, but does add some heat (see above about heat spreaders I used)
+        - Below 1.350V I couldn't reliably POST at 3600
+        - I did initial timings (below) at 1.5V to make sure I could POST and then tested at lower voltages until deciding on 1.350 *for my specific system*, you'll need to work through an overclocking guide to get yours set.
+    + 'Advanced Memory Settings' ... ***If I don't show a specific option in the BIOS timings, it is set to "Auto" (default).***
+        - 'Power Down Enable' = **Auto**
+        - 'Memory Subtimings'
+            * 'CAS Latency' = 18
+            * 'tRCDRD' = 21
+            * 'tRCDWR' = 8
+            * 'tRP' = 18
+            * 'tRAS' = 34
+            * 'tRC' = 52
+            * 'tWR' = 12
+            * 'tCWL' = 16
+            * 'tRRD_L' = 6
+            * 'tRFC' = 570
+            * 'tRFC2' = 60
+            * 'tFAW' = 16
+            * 'Command Rate(tCMD)' = 1T
+            * 'Gear Down Mode' = Disabled
+            * ... NOTE: I didn't change 'CAD Bust Setup Timing' or 'CAD Bus Drive Strength' ... getting these perfect might allow further sub-timing tightening later but I got tired. 
