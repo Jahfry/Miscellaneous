@@ -77,47 +77,40 @@ Since I'm putting more voltage into these, I added thick aluminum heat spreaders
         - Same as what would come with the Barrow RAMWBT-PA water cooling kit
         - I bought the spreaders by themselves from Amazon and they were of a good quality ... if you're looking for them they look like this: ![Barrow RAM heat spreader](assets/RAM_heat_spreaders_barrow.jpg)
 
-### My actual 'final' memory timings:
-
-'Final' is quoted because I have found that, with these timings and PBO Enabled, I'm not seeing great boost behavior in a bare metal Windows system. It's not awful but not great. I'll be revisiting my BIOS settings (when I upgrade to a new BIOS) at a future time and if I update stuff I'll post here. *Are overclocks ever really final?*
+### Timings:
 
 **Go into BIOS configuration:**
 
-* press [DEL] on the first screen
-* if you accidentally made it to the Dracut menu screen: select the 2nd row 'Reboot to Computer Setup Utility' option and it will reboot to BIOS config
+Values in parentheses () are the default on my BIOS.
+
+Any setting in 'Tweaker' > 'Advanced Memory Settings' that isn't shown here is left on defaults "auto". 
+
+* press [DEL] on the BIOS boot screen
 * *If you're in 'Easy Mode', switch to 'Advanced' with [F2]**
-* If your BIOS UI is very laggy and it bugs you, press [CONTROL+ALT+F6] to set to a lower resolution. It will be blurrier but much faster if doing a lot of navigation. This may only happen if you disable 'CSM' during the steps below. 
-* 'System Info.' > 'BIOS Version'
-    + *I'm running on BIOS F34 right now, anything from F11 to F35b should work.*
-    + F35b (not yet updated to that) makes note of memory improvements so you may want to look at it or newer when available. 
-    + F10 and earlier had problems for VFIO. 
-        - If you're on F10 or earlier please upgrade your BIOS first (*make sure to remember any memory timings/etc you want to keep*)
-        - This should also apply to many other Aorus X570 boards as they seem to have similar BIOS revision numbers. 
-        - I can only say that F34 has been stable for me.
+    + If your BIOS UI is very laggy and it bugs you, press [CONTROL+ALT+F6] to set to a lower resolution. It will be blurrier but much faster if doing a lot of navigation. This may only happen if you disable 'CSM' during the steps below. 
 * 'Tweaker'
-    + 'System Memory Multiplier' = **36.00**
-        - Using a small 32GB (2 x 16GB) Micron E-Die kit, I can get my 5950x to 3800 UCLK without a sweat, but the RAM here was never able to be usable above 3600. That's actually pretty decent given the JEDEC speed of this RAM is 3200 (which is the fastest ECC I've found)
+    + 'System Memory Multiplier' = **36.00** (32.00)
     + 'FCLK Frequency' = **Auto**
-    + 'UCLK Mode' = **UCLK--MEMCLK**
-    + 'DRAM Voltage  (CH A/B)' = **1.350V**
-        - default is **1.2V**. 1.350 should be long-term safe, but does add some heat (see above about heat spreaders I used)
-        - Below 1.350V I couldn't reliably POST at 3600
+    + 'UCLK Mode' = **UCLK==MEMCLK** (Auto)
+    + 'DRAM Voltage  (CH A/B)' = **1.370V** (1.200)
+        - default is **1.2V**. 1.370 should be long-term safe as long as you watch the heat (see above about heat spreaders I used)
+        - Below 1.370V I couldn't reliably POST at 3600
+            * on earlier BIOS versions I could at 1.350v with different timings
+            * I -can- run this at 1.360v but that's riding the edge, so +.010 for stability
+            * Note: X570 is a little squishy on voltages, meaning YOU see 1.370v but the system can go up by .030v, so in reality this is the same as 1.400v on other platforms ... and this is why I wouldn't run it higher if you can't get yours stable at 1.370v or lower. 
         - I did initial timings (below) at 1.5V to make sure I could POST and then tested at lower voltages until deciding on 1.350 *for my specific system*, you'll need to work through an overclocking guide to get yours set.
     + 'Advanced Memory Settings' ... ***If I don't show a specific option in the BIOS timings, it is set to "Auto" (default).***
         - 'Power Down Enable' = **Auto**
         - 'Memory Subtimings'
-            * 'CAS Latency' = 18
-            * 'tRCDRD' = 21
-            * 'tRCDWR' = 8
-            * 'tRP' = 18
-            * 'tRAS' = 34
-            * 'tRC' = 52
-            * 'tWR' = 12
-            * 'tCWL' = 16
-            * 'tRRD_L' = 6
-            * 'tRFC' = 570
-            * 'tRFC2' = 60
-            * 'tFAW' = 16
+            * 'CAS Latency' = 18 (22)
+            * 'tRCDRD' = 22 (22)
+            * 'tRCDWR' = 8 (22)
+            * 'tRP' = 18 (16)
+            * 'tRAS' = 32 (52)
+            * 'tRC' = 52 (74)
+            * 'tRFC' = 560 (312) ... Micron 16Gb E-Die chips don't go nearly as low here as Samsung B-Die
+            * 'tFAW' = 16 (34)
             * 'Command Rate(tCMD)' = 1T
             * 'Gear Down Mode' = Disabled
-            * ... NOTE: I didn't change 'CAD Bust Setup Timing' or 'CAD Bus Drive Strength' ... getting these perfect might allow further sub-timing tightening later but I got tired. 
+    + I didn't change 'CAD Bus Setup Timing' or 'CAD Bus Drive Strength' ... getting these perfect might allow further timing tightening ... I tried some options here but didn't have improvement
+
