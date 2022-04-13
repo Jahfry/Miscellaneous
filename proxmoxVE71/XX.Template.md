@@ -1,14 +1,85 @@
+Other stuff: Windows on USB for firmware/benchmarks/etc
+
+
 # Proxmox VE 7.1 NAS and Gaming VMs - 02 - Proxmox Config
 
+Reminder: I'm a Proxmox newb, so don't take anything here as strict or necessarily even correct. 
+
+The basics for installing Proxmox are elsewhere (start [here](https://www.proxmox.com/en/proxmox-ve/get-started), and [the forums](https://forum.proxmox.com/), [Reddit](https://www.reddit.com/r/ProxMox/), etc). I'm not redoing all of that but I will go over the steps during install where I had something specific. 
 
 ---
 
-## Hardware Components
+## Install
 
-* 
-    + 
-        - 
-            * 
+* Boot to your installation image, probably the .iso on a USB
+* 'Install Proxmox VE'
+* Agree to the license
+* DON'T just click "Accept" on the next screen, now you get to decide where to install your boot image
+* Deciding which disk to install Proxmox on
+    + If you only have 1 or a couple of disks, you probably already have one in mind, go for it. 
+    + In my system I have a number of options:
+        - one or more (up to 4 mirror or stripe) 8TB spinning NAS drives
+            * nope, these are reserved for my NAS array
+        - one or 2 (mirror or stripe) 4TB spinning consumer drives
+            * considered, to avoid SSD wear and tear, but I like keeping these open for projects
+        - one or 2 (mirror or stripe) 1TB consumer SSDs
+            * considered, these were originally cache drives in my Unraid box, but no, reserve for other stuff
+        - 1TB consumer gen3 NVME
+            * nope, reserved for games and editing content
+        - /dec/sdb ... 500GB consumer SSD
+            * yep, this is the one. 
+            * What about that SSD wear and tear?
+                + we'll do some Proxmox config changes to minimize it
+                + the drive is small enough we can afford to do backups of it in case of failure
+    + If you are building a new system, consider finding enterprise-class SSDs with higher write endurance (there's a lot of lightly used ones that go up on Ebay if you want to save $). I started buying and building but then financial situation changed so I went with what I have. 
+* Preparing the SSD
+    + because I am reusing my small SSD (it already had a Proxmox install from testing) I got an error: 'hardisk /dev/sdb too small: 0GB' and the installer failed. 
+    + If this is a completely new SSD, or you've already done a wipe on it, then you can skip this part.
+        - ***Warning:*** these commands will wipe all data on the disk
+            * Be *100% certain* you know the device name of the SSD to wipe ('/dev/sdb' in this case)
+        - Press [control]+[alt]+F3 to get a console shell
+        - `wipefs /dev/sdb`
+        - `blkdiscard -f /dev/sdb`
+            ... the 2 commands above are actually redundant, but I've used both, you can probably just use the first
+        - [control]+[alt]+F4 (I think that was it, if not, cycle the F keys) to get back to the installer GUI
+* Deciding which filesystem to install Proxmox with, pick based on your knowledge/comfort. 
+    + ext4 ... old school, stable, journaling file system
+        - based on ext3 with journaling added on top, so it has decades of use but also hasn't changed much
+    + xfs ... newer but not new, journaling file system with extra features
+        - built from the beginning to have journaling (vs ext4) and be more minimal on system uses than other options mentioned here. I've successfully used XFS on a large Unraid server and had no complaints. 
+    + zfs ... newer (to Linux anyway) copy-on-write volume managing system that can hold file systems
+        - While ZFS on Linux is relatively new, it is a very mature file system having started in the 90s
+        - ZFS can be intimading to new users for how many options it has as well as old Linux users due to ZFS having a lot of knew concepts and things to keep in mind.
+        - As openZFS has become much more stable on Linux in recent years it has become much more used and there is are much better community resources for it than just 3-5 years ago
+    + btrfs ... newest copy-on-write filesystem
+        - btrfs was the first mainstream copy-on-write file system for Linux. A few years back it had some serious problems but has become much more reliable. 
+        - It has some of the benefits of ZFS (which was an inspiration for btrfs's creators) but is simpler. However simpler isn't always better as it means you don't get all of the rich tools ZFS has. 
+    + *I'll be using ZFS RAID0 as one of my goals is to learn more about ZFS.* I've run and reinstalled a number of ZFS systems the last few months and the more I use it the more comfortable I've gotten with how well it manages data. I've exported and imported 2 different ZFS raidz arrays on this computer many times just in the last week and it is really impressive (compared to the days of using hardware RAID boxes) on how well it has handled it. 
+         - Why RAID0? Simple ... I'm only giving 1 drive to the boot drive. These are [many other levels that you can use for your boot setup](https://pve.proxmox.com/wiki/ZFS_on_Linux#_installation_as_root_file_system):
+* Ok, let's actually set this up in the installer
+    + Click the correct disk in the drop-down list
+    + Change 'ext4' to 'zfs (RAID0)'
+    + The installer will now show you ALL drives as RAID0 can stripe across multiple disks
+        - 'Deselect All' button
+        - For 'Harddisk 0' select the target disk (in this case, /dev/sdb, the small SSD)
+        - 'Advanced Options' 
+            * ashift = 13 (8192 sector for this SSD, which I'm *fairly* sure about, [more details](https://blog.zanshindojo.org/proxmox-zfs-performance/) ... this can't be changlug)
+            * compress = on (default)
+            * checksum = on (default)
+            * copies = 1 (default)
+            * hdsize = 465.0 (default, entire disk)
+* timezone/password/email ... whatever works for you
+* Management Interface: 
+    + This motherboard has 2 ethernet devices (and a wifi that we're ignoring here). 
+    + enp6s0 is a 1Gb Intel NIC
+    + enp7s0 is a 2.5Gb NIC
+    + I have static leases set up for these on my router and select enp6s0 for the management interface
+* Finish the installer
+
+## Tweaks 
+
+(after install is done and the system is booted)
+
 
 ---
 > [^ [TOP OF PAGE](#proxmox-ve-71-nas-and-gaming-vms---02---proxmox-config)] ... ***End:*** *Proxmox VE 7.1 NAS and Gaming VMs - Proxmox Config*
