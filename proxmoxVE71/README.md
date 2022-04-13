@@ -18,9 +18,7 @@ I'm posting is for 3 reasons:
 * [01. Hardware](01.Hardware.md)
     + Component list
     + RAM Timings
-* [02. Proxmox Configuration](02.ProxmoxConfig.md)
-    + Notes on drives used
-    + Post-install tweaks
+* [02. Proxmox Install](02.ProxmoxInstall.md)
 
 ---
 > [^ [TOP OF PAGE](#user-content-proxmox-ve-71-nas-and-gaming-vms---00---introduction)] ... ***End:*** *Proxmox VE 7.1 NAS and Gaming VMs - 00 - Introduction*
