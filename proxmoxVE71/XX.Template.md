@@ -20,6 +20,7 @@ The basics for installing Proxmox are elsewhere (start [here](https://www.proxmo
     + In my system I have a number of options:
         - one or more (up to 4 mirror or stripe) 8TB spinning NAS drives
             * nope, these are reserved for my NAS array
+            * NOTE: If you do decide to use more than 2 disks, use ZFS RAID1 or RAID1+0 ... there are performance issues with using RAIDZ on the boot drive related to efficient VM storage. 
         - one or 2 (mirror or stripe) 4TB spinning consumer drives
             * considered, to avoid SSD wear and tear, but I like keeping these open for projects
         - one or 2 (mirror or stripe) 1TB consumer SSDs
@@ -34,13 +35,13 @@ The basics for installing Proxmox are elsewhere (start [here](https://www.proxmo
     + If you are building a new system, consider finding enterprise-class SSDs with higher write endurance (there's a lot of lightly used ones that go up on Ebay if you want to save $). I started buying and building but then financial situation changed so I went with what I have. 
 * Preparing the SSD
     + because I am reusing my small SSD (it already had a Proxmox install from testing) I got an error: 'hardisk /dev/sdb too small: 0GB' and the installer failed. 
-    + If this is a completely new SSD, or you've already done a wipe on it, then you can skip this part.
+    + If this is a completely new SSD, or you've already done a wipe on it, then you can skip this part
+    + The 2 commands below are actually redundant, but I've used both, you can probably just use the first
         - ***Warning:*** these commands will wipe all data on the disk
             * Be *100% certain* you know the device name of the SSD to wipe ('/dev/sdb' in this case)
         - Press [control]+[alt]+F3 to get a console shell
         - `wipefs /dev/sdb`
-        - `blkdiscard -f /dev/sdb`
-            ... the 2 commands above are actually redundant, but I've used both, you can probably just use the first
+        - `blkdiscard /dev/sdb`
         - [control]+[alt]+F4 (I think that was it, if not, cycle the F keys) to get back to the installer GUI
 * Deciding which filesystem to install Proxmox with, pick based on your knowledge/comfort. 
     + ext4 ... old school, stable, journaling file system
@@ -79,6 +80,8 @@ The basics for installing Proxmox are elsewhere (start [here](https://www.proxmo
 ## Tweaks 
 
 (after install is done and the system is booted)
+
+* Dark Mode ... There isn't an official way to get Dark Mode on your Proxmox UI. But [PVEDiscordDark](https://github.com/Weilbyte/PVEDiscordDark) works very well and can be easily uninstalled if you don't like it. Use the instructions there, including a shift+reload in your browser, and come back here. 
 
 
 ---
