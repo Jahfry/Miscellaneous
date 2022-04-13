@@ -1,5 +1,10 @@
 # Proxmox VE 7.1 NAS and Gaming VMs - 02 - Proxmox Config
 
+Future things:
+
+* Windows on USB for benchmarks, firmware installs, etc
+* Explanation of how HA clustering can be useful at home (if more than 1 Proxmox device is possible)
+
 ---
 
 ## Hardware Components
