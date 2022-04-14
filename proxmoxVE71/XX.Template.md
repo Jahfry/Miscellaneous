@@ -13,7 +13,9 @@ Future things:
     + systemctl disable pve-ha-crm
     + systemctl disable corosync.service
     + systemctl disable pvesr.timer ... fails, used for replication (VMs?)
-
+atime
+swappiness
+SSH via keys
 
 
 ---
