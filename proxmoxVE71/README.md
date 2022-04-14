@@ -6,13 +6,11 @@ I'm using Proxmox VE 7.1 to then run multiple VMs and containers. These files *s
 
 ---
 
-## Content Map:
-
-* [00. Introduction](00.Introduction.md)
-* [01. Hardware](01.Hardware.md)
-    + Component list
-    + RAM Timings
-* [02. Proxmox Install](02.ProxmoxInstall.md)
-* [03. Proxmox Tweaks](03.ProxmoxTweaks.md)
+You probably want the [Introduction](00.Introduction.md) as it has the map of topics/contents.
 
 ---
+
+## Version/Changes:
+
+* Version: 0.0.0-20220413
+    + Not anywhere near ready for other people
