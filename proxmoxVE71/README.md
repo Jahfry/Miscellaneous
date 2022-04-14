@@ -9,6 +9,7 @@ I'm using Proxmox VE 7.1 to then run multiple VMs and containers. These files *s
 ## Contents:
 > **Hint:** Github has a drop-down automatic TOC, find the **≡** icon on the top-left
 
+* [00. Introduction](00.Introduction.md)
 * [01. Hardware](01.Hardware.md)
     + Component list
     + RAM Timings
