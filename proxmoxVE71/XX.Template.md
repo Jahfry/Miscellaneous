@@ -16,6 +16,8 @@ Future things:
 atime
 swappiness
 SSH via keys
+lsof | grep {app} ... see what is currently writing IO
+Windows on USB ... benchmarks/firmware/etc
 
 
 ---
