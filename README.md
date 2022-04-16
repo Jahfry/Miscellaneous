@@ -19,6 +19,9 @@ Something to know ... I write a LOT of notes. These notes are meant to be useful
 
 ... 10 years ago I would have wanted more notes but been too interested in getting things running to bother. 
 
-... Today,between watching both of my parents falling into dementia (father was a DBA and Unix toolchain coder who can barely use a web browser now) along with my 50+ year old brain slowing down ... I wanted more documentation!
+But today things are different. Why?
 
-Probably also has something to do with having a career in Technical Marketing / Sales Engineering / Project Management. While I'm no longer working (medical stuff, which contributes to my own memory issues) I still prefer to make everything as documented as I can. 
+* Watching both of my parents falling into dementia (father was a DBA and Unix toolchain coder who can barely use a web browser now)
+* My 50+ year old brain slowing down
+
+Also has something to do with having a career in Technical Marketing / Sales Engineering / Project Management. While I'm no longer working (medical spine stuff, which contributes to memory issues) I still prefer to make everything as documented as I can. 
