@@ -1,29 +1,8 @@
 # Proxmox VE 7.1 NAS and Gaming VMs - 0 - 
 
-...
-
-## Table of Contents:
-> **Hint:** Github has a drop-down automatic TOC, find the **≡** icon on the top-left
-
-* ^ [README](README.md)  (*links to* ***other pages***)
-* 0 - (***this page***)
-    + [06.A.](#06a-)
-* \> [ - ](..md) (*next page*)
-
----
-
-
-
----
-> [^ [TOP OF PAGE](#proxmox-ve-71-nas-and-gaming-vms---06---vm-windows-10)] ... ***End:*** *Proxmox VE 7.1 NAS and Gaming VMs - VM Windows 10*
-> 
-> \> NEXT: [0](0..md)
->
-> \< PREV: [0 ](0...md)
-
-
 Future things:
 
+<pre>
 * Windows on USB for benchmarks, firmware installs, etc
 * Explanation of how HA clustering can be useful at home (if more than 1 Proxmox device is possible)
 * log2ram
@@ -44,19 +23,27 @@ SSL Certificates
 
 
 
+</pre>
+
+
+
+...
+
+## Table of Contents:
+> **Hint:** Github has a drop-down automatic TOC, find the **≡** icon on the top-left
+
+* ^ [README](README.md)  (*links to* ***other pages***)
+* 0 - (***this page***)
+    + [06.A.](#06a-)
+* \> [ - ](..md) (*next page*)
+
 ---
 
-## Hardware Components
 
-* 
-    + 
-        - 
-            * 
 
 ---
-> [^ [TOP OF PAGE](#proxmox-ve-71-nas-and-gaming-vms---02---proxmox-config)] ... ***End:*** *Proxmox VE 7.1 NAS and Gaming VMs - Proxmox Config*
+> [^ [TOP OF PAGE](#proxmox-ve-71-nas-and-gaming-vms---06---vm-windows-10)] ... ***End:*** *Proxmox VE 7.1 NAS and Gaming VMs - VM Windows 10*
 > 
-> \> NEXT: [03 - Replace Me](03.ReplaceMe.md)
+> \> NEXT: [0](0..md)
 >
-> \< PREV: [01 - Hardware](01.Hardware.md)
-Other stuff: Windows on USB for firmware/benchmarks/etc
+> \< PREV: [0 ](0...md)
