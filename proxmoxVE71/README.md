@@ -89,5 +89,3 @@ Sources I pulled various pieces from (apologies if I missed stuff):
 > [^ [TOP OF PAGE](#user-content-proxmox-ve-71-nas-and-gaming-vms---README)] ... ***End:*** *Proxmox VE 7.1 NAS and Gaming VMs - README*
 > 
 > \> NEXT: [01 - Hardware](01.Hardware.md)
----
-
