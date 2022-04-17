@@ -5,24 +5,12 @@ Future things:
 <pre>
 * Windows on USB for benchmarks, firmware installs, etc
 * Explanation of how HA clustering can be useful at home (if more than 1 Proxmox device is possible)
-* log2ram
 * zram-swap?
 * https://pve.proxmox.com/wiki/Performance_Tweaks
-* Getting all hardware devices recognized
-* disable HA services
-    + systemctl disable pve-ha-lrm
-    + systemctl disable pve-ha-crm
-    + systemctl disable corosync.service
-    + systemctl disable pvesr.timer ... fails, used for replication (VMs?)
 atime
-swappiness
 SSH via keys
 lsof | grep {app} ... see what is currently writing IO
-Windows on USB ... benchmarks/firmware/etc
 SSL Certificates
-
-vmbr2
-
 
 </pre>
 
