@@ -53,7 +53,7 @@ If you're here for a specific topic, look through the [Content Map](#content-map
     + [03.E. Fix Missing Drivers](03.ProxmoxTweaks.md#03e-fix-missing-drivers)
         - [03.E.i. 'regulatory.db'](03.ProxmoxTweaks.md#03ei-regulatorydb)
         - [03.E.ii. FAILED fixes for 'iwlwifi' and 'thermal_zone2'](03.ProxmoxTweaks.md#03eii-failed-fixes-for-iwlwifi-and-thermal_zone2)
-* [04. Proxmox Extras](04.ProxmoxExtras.md) ... ***in progress***
+* [04. Proxmox Extras](04.ProxmoxExtras.md)
     + [04.A. Importing Existing ZFS Pool](04.ProxmoxExtras.md#04a-importing-existing-zfs-pool)
     + [04.B. Useful Utilities](04.ProxmoxExtras.md#04b-useful-utilities)
     + [04.C. Networking](04.ProxmoxExtras.md#04c-networking)
@@ -65,7 +65,7 @@ If you're here for a specific topic, look through the [Content Map](#content-map
         - [05.D.i. Override GPU Modules](05.ProxmoxGPUPassthrough.md#05di-override-gpu-modules)
         - [05.D.ii. Reverting 'drivertctl' Overrides](05.ProxmoxGPUPassthrough.md#05dii-reverting-driverctl-overrides)
         - [05.D.iii. Switch Between Console Video and VFIO](05.ProxmoxGPUPassthrough.md#05diii-switch-between-console-video-and-vfio)
-* [06. VM Windows 10](06.VMWindows10.md)
+* [06. VM Windows 10](06.VMWindows10.md) (** in progress **)
 
 ---
 
