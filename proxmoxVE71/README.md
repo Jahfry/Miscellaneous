@@ -56,6 +56,7 @@ If you're here for a specific topic, look through the [Content Map](#content-map
 * [04. Proxmox Extras](04.ProxmoxExtras.md) ... ***in progress***
     + [04.A. Importing Existing ZFS Pool](04.ProxmoxExtras.md#04a-importing-existing-zfs-pool)
     + [04.B. Useful Utilities](04.ProxmoxExtras.md#04b-useful-utilities)
+    + [04.C. Networking](04.ProxmoxExtras.md#04c-networking)
 * [05. Proxmox GPU Passthrough](05.ProxmoxGPUPassthrough.md)
     + [05.A. VFIO Kernel Modules](05.ProxmoxGPUPassthrough.md#05a-vfio-kernel-modules)
     + [05.B. Boot Parameters](05.ProxmoxGPUPassthrough.md#05b-boot-parameters)
