@@ -11,7 +11,7 @@ atime
 SSH via keys
 lsof | grep {app} ... see what is currently writing IO
 SSL Certificates
-
+CPU pinning
 </pre>
 
 
