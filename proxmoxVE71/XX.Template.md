@@ -12,6 +12,9 @@ SSH via keys
 lsof | grep {app} ... see what is currently writing IO
 SSL Certificates
 CPU pinning
+
+Bugs:
+Debian / Brave = no scrolling in drop-downs (VM add PCIE device, VM Host CPU select)
 </pre>
 
 
