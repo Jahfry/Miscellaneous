@@ -129,6 +129,13 @@ if ($phase eq 'pre-start') {
 
   print "$vmid stopped. Doing cleanup.\n\n";
 
+  # IMPORTANT:
+  # Output from the 'post-stop' phase will not show up normally whether the VM is
+  # shut down via the UI or via:
+  # `qm stop <vmid> post-stop` (where <vmid> is the VM number, example: `qm stop 100 post-stop`)
+  # If you want to see the results, you can run this manually in a shell like this:
+  # `/var/lib/vz/snippets/hookscript-driverctl.pl <vmid> post-stop` (replace <vmid>)
+  
   if (@pci_devices) {
     for (@pci_devices) {
       my $driverctl_cmd = "${driverctl} --nosave unset-override $_";
