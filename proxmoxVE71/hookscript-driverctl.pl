@@ -135,6 +135,7 @@ if ($phase eq 'pre-start') {
   # `qm stop <vmid> post-stop` (where <vmid> is the VM number, example: `qm stop 100 post-stop`)
   # If you want to see the results, you can run this manually in a shell like this:
   # `/var/lib/vz/snippets/hookscript-driverctl.pl <vmid> post-stop` (replace <vmid>)
+  # filed issue ... https://bugzilla.proxmox.com/show_bug.cgi?id=4009
   
   if (@pci_devices) {
     for (@pci_devices) {
