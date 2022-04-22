@@ -12,7 +12,7 @@
 #   * On VM stop, unset overrides (if device used for terminal framebuffer it should reappear)
 #
 # Usage:
-#   * Enable on a VM via: `qm set <vmid> -hookscript local:snippets/driverctl.pl`
+#   * Enable on a VM via: `qm set <vmid> -hookscript local:snippets/hookscript-driverctl.pl`
 #   * Disable via: `qm set <vmid> --delete hookscript`
 #
 # Details:
