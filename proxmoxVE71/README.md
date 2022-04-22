@@ -6,26 +6,19 @@
 
 I'm using Proxmox VE 7.1 to then run multiple VMs and containers. These files *should* be a log of everything I did to get my system configured. 
 
-* *These are long pages, geared more towards new users than experts.*
-* While I have tested these directions multiple times on fresh installs **on my own system**, *I can't verify on* ***your system***. I'm trying to add enough extra information to help you figure out workarounds. 
-* If you run into **something wrong**, *please [add an Issue](https://github.com/Jahfry/Miscellaneous/issues)*. This guide may get posted to other sites like Reddit and it will be helpful to not need to track all links. 
-* Feel free to ask questions via 'Issues'.
-
-*I'm posting publicly for 3 reasons:*
-
-* Log what I did in case I need to redo the install later [for personal reasons](https://github.com/Jahfry/Miscellaneous)
-* Have something others can sanity check for me
-* Assuming it is sane, allow others to use it as a **verbose** guide
+* *These pages are detailed, geared more towards documentation vs quick start.*
+* I have tested these directions multiple times on fresh installs **on my own system**, *but they can't include every detail for* ***your system***. Adding extra information to help you figure out workarounds. 
+* If you find **something wrong**, * (or have a question) please [add an Issue](https://github.com/Jahfry/Miscellaneous/issues)*. This may may get linked to other sites and it will be helpful to not need to track all links. 
 
 If you're configuring a similar system, start on [01. Hardware](01.Hardware.md). 
 
-If you're here for a specific topic, look through the [Content Map](#content-map). 
+If here for a specific topic, look through 'Content Map' (next). 
 
 ---
 
 ## Content Map:
 
-**NOTE:** I run my commands in many of these pages logged in as 'root' in a 'bash' shell. If you do something different just know you'll need to modify some commands rather than using directly as copied. Or log in as root and run `bash` before pasting. 
+**NOTE:** I run my commands in many of these pages logged in as 'root' in a 'bash' shell. If you do something different you'll need to modify some commands (like adding `sudo` rather than using directly as copied. Or log in as root and run `bash` before pasting commands. 
 
 1. If logged in to a non-root user (with permission), `su -` to switch to root (password for this is the root password)
 2. If in a different shell, `bash` (I do use bash syntax at times)
@@ -61,11 +54,7 @@ If you're here for a specific topic, look through the [Content Map](#content-map
     + [05.A. VFIO Kernel Modules](05.ProxmoxGPUPassthrough.md#05a-vfio-kernel-modules)
     + [05.B. Boot Parameters](05.ProxmoxGPUPassthrough.md#05b-boot-parameters)
     + [05.C. GPU IDs](05.ProxmoxGPUPassthrough.md#05c-gpu-ids)
-    + [05.D. Install and Configure 'driverctl'](05.ProxmoxGPUPassthrough.md#05d-install-and-configure-driverctl)
-        - [05.D.i. Override GPU Modules](05.ProxmoxGPUPassthrough.md#05di-override-gpu-modules)
-        - [05.D.ii. Reverting 'drivertctl' Overrides](05.ProxmoxGPUPassthrough.md#05dii-reverting-driverctl-overrides)
-        - [05.D.iii. Switch Between Console Video and VFIO](05.ProxmoxGPUPassthrough.md#05diii-switch-between-console-video-and-vfio)
-* [06. VM Windows 10](06.VMWindows10.md) (** in progress **)
++ [06. VM Windows 10](06.VMWindows10.md) (** in progress **)
 
 ---
 
@@ -77,7 +66,6 @@ Sources I pulled various pieces from (apologies if I missed stuff):
     + [Proxmox USB Bootstick mit log2ram oder folder2ram](https://forum.proxmox.com/threads/proxmox-usb-bootstick-mit-log2ram-oder-folder2ram.76583/) (German, use translate as necessary)
 * [Reddit.com/r/Proxmox](https://www.reddit.com/r/Proxmox)
     + [Suggestions to decreasing wearout of ssd's in Proxmox](https://www.reddit.com/r/Proxmox/comments/u129sw/suggestions_to_decreasing_wearout_of_ssds_in/)
-* [Gareth's blog](https://gareth.com/index.php/2021/09/14/proxmox-7-installation/)
 
 ---
 
