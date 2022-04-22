@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# hookscript to bind GPU to vfio-pci for VMs
+# hookscript-driverctl.pl - bind GPU to vfio-pci for VMs
 #
 # Purpose:
 #   * Scans VM conf file for any PCI passthrough devices
@@ -20,47 +20,93 @@
 #   * Based on /usr/share/pve-docs/examples/guest-example-hookscript.pl
 #   * If no PCI passthrough devices found, nothing happens and VM allowed to start
 #   * Note: this was my first time touching Perl in many years, look for bugs
+#
+# NOTE: currently figuring out about logging to syslog based on response to comment 
+# on https://bugzilla.proxmox.com/show_bug.cgi?id=4009
 
 use strict;
 use warnings;
+use File::Basename;
+use Sys::Syslog;
 
-print "GUEST HOOK: " . join(' ', @ARGV). "\n";
+#syslog("info", "test message");
+#syslog('info', '%s', 'another test');
+
+my ($hookscript_name) = basename($0);
+my $hookscript_dir = '/var/lib/vz/snippets/';
+
+# Open syslog
+openlog($hookscript_name, "perror,pid,nofatal,cons", "local0");
+
+# Generic subrouting to close syslog before any exit
+sub hookscript_exit {
+  closelog(); # close syslog
+  if ( $_[0] ) { exit $_[0]; } else { exit 0; }
+}
+
+
+# Verify arguments and coach user if needed, should only happen on shell execution
+if ($ARGV[0] !~ m/[0-9]{1,}/ || ! $ARGV[1] || grep( /^--help$/,@ARGV ) ) {
+    print <<EOF;
+
+${hookscript_name}:
+
+This script is meant to be run by the qemu system as a hookscript.
+
+See comments in ${hookscript_dir}${hookscript_name} for usage.
+
+To test direct from command line, use this syntax:
+    ${hookscript_name} <vmid> <phase>
+      ... <vmid> = # of the VM you're testing (can be started but save anything active)
+      ... <phase> = [pre-start|post-start|pre-stop|post-stop]
+
+EXAMPLE: `${hookscript_dir}${hookscript_name} 100 pre-start`
+
+EOF
+    hookscript_exit(1);
+}
+
+syslog("info","GUEST HOOK: " . join(' ', @ARGV));
+
 
 # First argument is the vmid
 my $vmid = shift;
 # Second argument is the phase
 my $phase = shift;
 
-# PVE config file for the VM
-my $config_file = "/etc/pve/nodes/gyges/qemu-server/" . $vmid . ".conf";
 # Array holding any passthrough PCI devices from the config file above
 my @pci_devices = ();
 # `driverctl` installed via: `apt get driverctl`
 my $driverctl = "/usr/sbin/driverctl";
 my $driverctl_cmd_listoverrides = "${driverctl} list-overrides 2>&1";
+# PVE config file for the VM
+my $config_file;
+if ($vmid) {
+  $config_file = "/etc/pve/nodes/gyges/qemu-server/" . $vmid . ".conf";
+  # Read in the VM configuration to see what PCI devices are passed through
+  # Example line from /etc/pve/nodes/guges/qemu-server/100.conf
+  # hostpci0: 0000:0b:00.0,pcie=1
+  if (-r $config_file) {
+    print "config file: $config_file\n";
+    open ( _CF, $config_file ) or die "Unable to open config file: $config_file\n";
+    while ( <_CF> ) {
+      if (m/^hostpci[0-9]{1,}:[\s]([^\,]*)/) {
+        push(@pci_devices,$1);
+      }
+    }
+  } else {
+    print "\nERROR: failed to read $config_file.\nUnable to start VM.\n";
+    hookscript_exit(1);
+  }
+
+}
 
 if (! -e $driverctl) {
   print "\nERROR: $driverctl does not exist.\nUnable to start VM.\n";
-  exit 1;
+  hookscript_exit(1);
 } elsif (! -x $driverctl) {
   print "\nERROR: $driverctl is not executable\nUnable to start VM.\n";
-  exit 1;
-}
-
-# Read in the VM configuration to see what PCI devices are passed through
-# Example line from /etc/pve/nodes/guges/qemu-server/100.conf
-# hostpci0: 0000:0b:00.0,pcie=1
-if (-r $config_file) {
-  print "config file: $config_file\n";
-  open ( _CF, $config_file ) or die "Unable to open config file: $config_file\n";
-  while ( <_CF> ) {
-    if (m/^hostpci[0-9]{1,}:[\s]([^\,]*)/) {
-      push(@pci_devices,$1);
-    }
-  }
-} else {
-  print "\nERROR: failed to read $config_file.\nUnable to start VM.\n";
-  exit 1;
+  hookscript_exit(1);
 }
 
 if ($phase eq 'pre-start') {
@@ -87,7 +133,7 @@ if ($phase eq 'pre-start') {
       print "    $_ ... override currently active.\n";
     }
     print "\nNOTE: `driverctl list-overrides` to see this list again.\nUnable to start VM.\n";
-    exit 1;
+    hookscript_exit(1);
   }
 
   # No conflicting overrides, so override them now if needed:
@@ -98,7 +144,7 @@ if ($phase eq 'pre-start') {
       my $exit_code = system($driverctl_cmd_setoverride);
       if ($exit_code != 0) {
         print "    Failed with exit code: $exit_code\nUnable to start VM.\n";
-        exit 1;
+        hookscript_exit(1);
       } else {
         print "    SUCCESS\n";
       }
@@ -136,7 +182,7 @@ if ($phase eq 'pre-start') {
   # If you want to see the results, you can run this manually in a shell like this:
   # `/var/lib/vz/snippets/hookscript-driverctl.pl <vmid> post-stop` (replace <vmid>)
   # filed issue ... https://bugzilla.proxmox.com/show_bug.cgi?id=4009
-  
+
   if (@pci_devices) {
     for (@pci_devices) {
       my $driverctl_cmd = "${driverctl} --nosave unset-override $_";
@@ -161,7 +207,11 @@ if ($phase eq 'pre-start') {
   }
 
 } else {
-    die "got unknown phase '$phase'\n";
+
+  # phase didn't match a known case
+  closelog(); # close syslog
+  die "\ngot unknown phase '$phase'\n\nTry --help for more information.\n\n";
+
 }
 
-exit(0);
+hookscript_exit();
