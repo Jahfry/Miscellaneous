@@ -32,7 +32,7 @@ my $hookscript_dir = '/var/lib/vz/snippets/';
 
 # Verify arguments, show user how to run from shell if needed
 if ((@ARGV && $ARGV[0] !~ m/[0-9]{1,}/) || ! $ARGV[1] || grep( /^--help$/,@ARGV ) ) {
-    print <<EOF;
+    print <<EOM;
 
 ${hookscript_name}:
 
@@ -46,7 +46,7 @@ To debug from command line, use this syntax:
       ... <phase> = [pre-start|post-start|pre-stop|post-stop]
     EXAMPLE: `${hookscript_dir}${hookscript_name} 100 pre-start`
 
-EOF
+EOM
     exit(1);
 }
 
