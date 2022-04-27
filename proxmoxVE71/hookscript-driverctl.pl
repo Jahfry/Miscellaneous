@@ -78,7 +78,7 @@ my $config_file_device;
 # ... all PCI devices ie "All Functions" checked in UI
 # hostpci0: 0000:0b:00,pcie=1
 if ($vmid) {
-  $config_file = "/etc/pve/nodes/gyges/qemu-server/" . $vmid . ".conf";
+  $config_file = "/etc/pve/qemu-server/" . $vmid . ".conf";
   if (-r $config_file) {
     print "VM ${vmid} config file: ${config_file}\n";
     open ( _CF, $config_file ) or hookscript_die("ERROR: Failed to open ${config_file}.");
