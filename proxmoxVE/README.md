@@ -1,10 +1,15 @@
-# Proxmox VE 7.1 NAS and Gaming VMs - README
+# Proxmox VE NAS and Gaming VMs - README
 
 ***NOTE: files still in progress ... don't use this ... probably don't even read it yet***
 
 ## Background:
 
-I'm using Proxmox VE 7.1 to then run multiple VMs and containers. These files *should* be a log of everything I did to get my system configured. 
+I'm using Proxmox VE to run multiple VMs and containers. These files *should* be a log of everything I did to get my system configured. 
+
+### Proxmox VE versions tested:
+
+* 7.1 ... guide was originally started
+* ~~7.2~~ ... not yet tested, watching a couple of issues before moving to it
 
 * *These pages are detailed, geared more towards documentation vs quick start.*
 * I have tested these directions multiple times on fresh installs **on my own system**, *but they can't include every detail for* ***your system***. Adding extra information to help you figure out workarounds. 
@@ -75,6 +80,6 @@ Sources I pulled various pieces from (apologies if I missed stuff):
     + Not anywhere near ready for other people
 
 ---
-> [^ [TOP OF PAGE](#user-content-proxmox-ve-71-nas-and-gaming-vms---README)] ... ***End:*** *Proxmox VE 7.1 NAS and Gaming VMs - README*
+> [^ [TOP OF PAGE](#user-content-proxmox-ve-nas-and-gaming-vms---README)] ... ***End:*** *Proxmox VE NAS and Gaming VMs - README*
 > 
 > \> NEXT: [01 - Hardware](01.Hardware.md)
