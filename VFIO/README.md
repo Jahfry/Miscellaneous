@@ -10,3 +10,6 @@
   * Displays a list of devices attached to IOMMU groups (not just PCI devices, currently shows USB, future plan is Network and Block devices)
   * Has a number of different output options
   * See the POD information the script (or run script like `iommu_dev_tree.pl --manual`) for documentation
+  * Requires:
+    * Perl with these common modules: Pod::Usage, File::Basename, Cwd, Data::Dumper, utf8
+    * `lspci`, `lsusb`
