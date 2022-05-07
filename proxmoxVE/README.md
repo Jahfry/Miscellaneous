@@ -11,7 +11,7 @@ I'm using Proxmox VE to run multiple VMs and containers. These files *should* be
     * 7.1 ... guide was originally started (should work mostly as-is on earlier versions)
 * *These pages are detailed, geared more towards documentation vs quick start.*
 * I have tested these directions multiple times on fresh installs **on my own system**, *but they can't include every detail for* ***your system***. Adding extra information to help you figure out workarounds. 
-* If you find **something wrong**, *(or have a question)* please [add an Issue](https://github.com/Jahfry/Miscellaneous/issues)*. This may may get linked to other sites and it will be helpful to not need to track all links. 
+* If you find **something wrong**, (or have a question) please *[add an Issue](https://github.com/Jahfry/Miscellaneous/issues)*. This may may get linked to other sites and it will be helpful to not need to track all links. 
 
 If you're configuring a similar system, start on [01. Hardware](01.Hardware.md). 
 
