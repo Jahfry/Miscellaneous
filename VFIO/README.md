@@ -3,6 +3,9 @@
 * [driverctl hookscript](../proxmoxVE/hookscript-driverctl.pl)
   * This is actually in a different subdirectory
   * Information about how I use this is [here](../proxmoxVE/05.ProxmoxGPUPassthrough.md#05d-driverctl-hookscript)
+  * I wrote this for my Proxmox machine but should generically work for other qemu-based VM hosts as long as you can install `driverctl` 
+    * Debian-based should "just work"
+    * Other systems may need paths adjusted
 * [iommu_dev_tree.pl](iommu_dev_tree.pl)
   * Displays a list of devices attached to IOMMU groups (not just PCI devices, currently shows USB, future plan is Network and Block devices)
   * Has a number of different output options
