@@ -1,22 +1,23 @@
 #!/usr/bin/perl
 # iommu_dev_tree.pl - show IOMMU information including USB devices attached
 #
-# version: 20220505-1 - basically works for PCI+USB, formatting is bad, needs NET+BLOCK
+# version: 20220506-1
 #
 # Details:
 #   * Run with --man for easier consumption of the help below
 #   * Tested on Proxmox VE 7.1 (based on Debian Bullseye)
 #   * if your system has Ruby, this might do the job in a much shorter file:
 #     https://gist.github.com/JaciBrunning/6be34dfd11b7b8cfa0aab57ad260c518
+#     (only IOMMU > PCI > USB, not NET or BLOCK)
 #
 # Notes:
 # * Subroutines placed directly below code that first use them (sorry?)
 #
-# * Devices read in below have added fields:
-#   (unusual names used for sorting output)
-#   ... '-type'           = "type" of device (PCI_slot, USB_device, etc)
-##   ... 'x_output_format' = how to place device-specific vars into final output
-#   ... '~devices_attached' = list of devices attached "below" this one
+# * Devices read in below have added fields ... unusual names used for sorting:
+#   ... '-type'             = device $type (IOMMU_Group, PCI_slot,     USB_device, etc)
+#   ... '-id'               = device $id   (1,           0000:00:00.0, 1-1,        etc)
+#   ... '~devices_attached' = array ($ids) of devices attached to this one in the tree
+#   ... '~devices_total'    = value = number of devices attached
 #
 # POD:
 
@@ -85,7 +86,7 @@
   * IOMMU Groups via '/sys/kernel/iommu_groups/*'
   * PCI Devices via
      '/sys/bus/pci/devices/*'
-     `lspci -qmm`
+     `lspci -Dqmm`
   * USB Devices via:
      '/sys/bus/usb/devices/*'
      `lsusb`
@@ -144,22 +145,22 @@ pod2usage(-verbose => 99,-sections => "NAME|USAGE|DESCRIPTION|DETAILS|REPO") if 
 # if adding sata/block: `ls -aFl /sys/block`
 # if adding NICs: `ls -aFl /sys/class/net`
 
-# MAIN::lsusb - get USB device description from `lsusb`
+# MAIN::lsusb - get USB device description from `lsusb`, associated by idVendor:idProduct
 my @list_lsusb = system2array("lsusb");
-my %lsusb_by_vendorproduct;
+my %lsusb;
 for (@list_lsusb) {
   # $1=bus $2=device $3=vendor_id $4=product_id $5=device_name
   m/^Bus ([0-9]{3}) Device ([0-9]{3}): ID ([0-9A-Fa-f]{4}):([0-9A-Fa-f]{4}) (.*)$/;
-  $lsusb_by_vendorproduct{"${3}:${4}"} = {'bus',$1,'device',$2,'description',$5};
+  $lsusb{"${3}:${4}"} = {'bus',$1,'device',$2,'description',$5};
 }
 
-# MAIN:lspci - get PCI device description from `lspci`
+# MAIN:lspci - get PCI device description from `lspci`, associated by PCI id
 my @list_lspci = system2array("lspci","-Dqmm");
-my %lspci_by_id;
+my %lspci;
 for (@list_lspci) {
   # $1=pci_id $2=class $3=vendor_name $5=description
   m/^([^ ]*) "([^"]*)" "([^"]*)" "([^"]*)" (.*)$/;
-  $lspci_by_id{"${1}"} = {'class',$2,'vendor_name',$3,'description',$4};
+  $lspci{"${1}"} = {'class',$2,'vendor_name',$3,'description',$4};
 }
 
 # SUB::system2array() - returns output of a system command as a chomped hash
@@ -177,6 +178,7 @@ sub system2array {
 
 # MAIN::USB - Build "%usb_devices" ... a tree of 'PCI_slot' > 'USB_dev' (can be multiple)
 my %usb_devices;
+my $usb_tree_level = 0;
 my $dir_usb_devices = '/sys/bus/usb/devices';
 my @usb_devices = sort(dir2array($dir_usb_devices));
 for (sort(dir2array($dir_usb_devices))) {
@@ -188,7 +190,6 @@ for (sort(dir2array($dir_usb_devices))) {
     my $pci_id_match = qr/[\dA-Fa-f]{4}:[\dA-Fa-f]{2}:[\dA-Fa-f]{2}\.[\dA-Fa-f]{1}/;
     my @returned = $usb_device_path =~ m/^.*\/(${pci_id_match})\/([^\/]*)(.*)/;
     push @{ $usb_devices{${returned}[0]}{"$usb_root"} }, \%usb_device;
-    $usb_devices{${returned}[0]}{'-type'} = 'USB_root';
   }
 }
 
@@ -213,6 +214,7 @@ sub dir2array {
 ## convert to inner()?
 sub usbfiles2hash {
   my $usb_dir = $_[0] or die "usbfile2hash() first argument must be a directory: $!";
+  $usb_tree_level++;
   my %usb_device;
   my $skip_device = 0;
   my $id = basename($usb_dir);
@@ -226,25 +228,28 @@ sub usbfiles2hash {
       }
     }
     for my $key (@usb_vars) {
-    $usb_device{'id'} = $id;
+      $usb_device{'-id'} = $id;
       if (-r "${usb_dir}/${key}") {
         $usb_device{"$key"} = file2string("${usb_dir}/${key}");
       }
       $usb_device{'driver'} = (-l "${usb_dir}/driver") ? basename(readlink("${usb_dir}/driver")) : '';
-      if ($usb_device{'driver'} eq 'usb') {
+      $usb_device{'-type'} = "USB_device";
+
+      if ($usb_device{'driver'} eq 'usb' && $usb_tree_level == 1) {
         $usb_device{'-type'} = "USB_root";
-      } elsif ($usb_device{'driver'} eq 'hub') {
-        $usb_device{'-type'} = "USB_hub";
-        unless ($usb_device{'product'} && $usb_device{'driver'}) { # don't add empty hubs/devices
+      } elsif ($usb_device{'product'}) {
+        if ($usb_device{'product'} =~ /[^\S]*hub[^\S]*/i) {
+          $usb_device{'-type'} = "USB_hub"; # not ACTUALLY driver=hub, but this allows condensing list
+        }
+      } else {
+          $usb_device{'-type'} = "USB_device";
+        if ($usb_device{'driver'} eq 'hub') { # actual hub device is empty aside from 'driver', skipped
           $skip_device = 1;
         }
-      } elsif ($usb_device{'driver'}) {
-        my $type = $usb_device{'driver'};
-        $type =~ s/usb[-]*//;
-        $usb_device{'-type'} = "USB_" . $type;
       }
     }
   }
+  $usb_tree_level--;
   if ($skip_device) {
     return;
   } else {
@@ -283,12 +288,13 @@ for (@list_iommu_groups) {
     my $pci_id = $_;
     my $pci_vendor = file2string("${dir_pci_devices}${pci_id}/vendor");
     my $pci_device = file2string("${dir_pci_devices}${pci_id}/device");
-    my $pci_class = $lspci_by_id{$pci_id}{'class'};
-    my $pci_vendor_name = $lspci_by_id{$pci_id}{'vendor_name'};
-    my $pci_description = $lspci_by_id{$pci_id}{'description'};
-    %pci_device = ('id',$pci_id,'-type','PCI_slot','vendor',$pci_vendor,'device',$pci_device,'class',$pci_class,'vendor_name',$pci_vendor_name,'description',$pci_description);
+    my $pci_class = $lspci{$pci_id}{'class'};
+    my $pci_vendor_name = $lspci{$pci_id}{'vendor_name'};
+    my $pci_description = $lspci{$pci_id}{'description'};
+    %pci_device = ('-id',$pci_id,'-type','PCI_slot','vendor',$pci_vendor,'device',$pci_device,'class',$pci_class,'vendor_name',$pci_vendor_name,'description',$pci_description);
     $iommu_group{'~devices_attached'}{$pci_id} = \%pci_device;
-    $iommu_group{'-type'} = 'IOMMU_Group';
+    $iommu_group{'-type'} = 'IOMMU_group';
+    $iommu_group{'-id'} = $iommu_group;
     if ($usb_devices{$pci_id}) {
       $iommu_group{'~devices_attached'}{$pci_id}{'~devices_attached'} = $usb_devices{$pci_id};
     }
@@ -350,6 +356,8 @@ sub expand_generic {
 #  ... dependent on internal data format (use '--dumper' to see)
 sub expand_specific {
   my $indent = -2; # starts at -2 to be 0 on first output
+#my %array_count;
+#my %array_counter;
   my $level  = 1;  # tracks tree level (not indenting)
   my $id     = ''; # passes the previous $id to the next level for display
   my %rehash = (); # rebuilds key=values for display when a branch finishes
@@ -358,16 +366,26 @@ sub expand_specific {
     my $ref = $_[0];
     my $key = $_[1];
     $level++;
-    $id = ($_[2]) ? $_[2] : '0' ; # if empty = first iteration, 0 is string for display
+#print "\n",expand_specific_indenting($indent),"[$level:$indent][array_count{ref}] K=$key R=$ref";
+    $id = ($_[2]) ? $_[2] : '0' ; # if empty = first iteration, 0 stringified for display
     if (ref $ref ne 'ARRAY' && ref $ref ne 'HASH') {
-#      if ($key !~ m/-type|~devices_attached/) {
+#      if ($key !~ m/-id|-type|~devices_attached/) {
       if ($key ne '~devices_attached') {
         $rehash{$key} = $ref; # store, print all during beginning of next HASH
       } elsif (! $key) { # should never see this:
         print "\n",expand_specific_indenting($indent),"! (warning ... value = $ref)";
       }
     } elsif (ref $ref eq 'ARRAY'){
-        for (sort {$a <=> $b} @{$ref}) { $inner->($_,'',"$key"); }
+#$array_count = 0;
+        for (sort {$a <=> $b} @{$ref}) {
+#$array_count++;
+
+my $type = '';
+if ($$_{'-type'}) { $type = $$_{'-type'}; }
+#print "\nARRAY: _ = $_ ... key = $key ... ref = $ref ... type = $type\n";
+          $inner->($_,'',"$key");
+
+        }
     } elsif (ref $ref eq 'HASH'){ # all expected output generated here
       if (%rehash) {   # if info from prior device, display now
         print expand_specific_deviceinfo->(\%rehash);
@@ -378,7 +396,8 @@ sub expand_specific {
       my $id = ($key) ? $key : $id;   # pass $id down if not a $key
       if ($id eq '~devices_attached') { $indent--;
       } elsif ($type && $id ne '~devices_attached') {
-        print "\n",expand_specific_indenting($indent),"${type}: ${id}";
+#        print "\n",expand_specific_indenting($indent),"${type}: ${id}";
+        print "\n",expand_specific_indenting($indent);
       }
       my $keys_alpha = 0;
       for (keys %{$ref}) {
@@ -390,7 +409,13 @@ sub expand_specific {
       if (! $keys_alpha) {
         for my $k(sort {$a <=> $b} keys %{$ref}){ $inner->($ref->{$k},$k,"$id"); }
       } else {
-        for my $k(sort keys %{$ref}){ $inner->($ref->{$k},$k,"$id"); }
+        for my $k(sort keys %{$ref}){
+#if ($$ref{'-type'}) { $array_count{$$ref{'-type'}}++;
+#print "\n $$ref{'-type'} x $array_count{$$ref{'-type'}}\n";
+#}
+
+          $inner->($ref->{$k},$k,"$id");
+        }
       }
       if ($id eq '~devices_attached') { $indent++; }
       $indent--;
@@ -399,6 +424,7 @@ sub expand_specific {
   }; # semi-colon (;) is important, ends 'inner = sub', don't remove
   $inner->($_,'',"$id") for @_;
   print expand_specific_deviceinfo->(\%rehash) . "\n\n";
+#print "\n\n";
 }
 
 #www
@@ -406,40 +432,102 @@ sub expand_specific {
 #  ... called by SUB::expand_specific()
 sub expand_specific_deviceinfo {
   my $ref  = $_[0];
-  my $type = ($ref->{-type}) ? $ref->{-type} : 0;
-  my $rehash = '';
-  for my $key (keys %{$ref}) {
-    if ($key !~ /^(-type|id)$/) { # ?
-      $rehash .= " $key=$ref->{$key}";
+  my %out; # contains formatted display keys:values
+#  my $rehashed; # formatted display string
+
+  # format display keys:values
+  # '-type' and '-id' should always exist if data format correct
+  $out{'type'} = ($ref->{'-type'}) ? $ref->{'-type'} : '!UNKNOWN-type';
+  $out{'id'}   = ($ref->{'-id'})   ? "$ref->{'-id'}" : '0';
+  # Map input keys to output keys as needed
+  # IOMMU_group or PCI_slot or Unknown = no remapping, just populate to avoid warnings
+  $out{'class'}       = ($ref->{'class'})       ? $ref->{'class'}       : '';
+  $out{'description'} = ($ref->{'description'}) ? $ref->{'description'} : '';
+  $out{'vendor_name'} = ($ref->{'vendor_name'}) ? $ref->{'vendor_name'} : '';
+  $out{'vendor'}      = ($ref->{'vendor'})      ? $ref->{'vendor'}      : '';
+  $out{'device'}      = ($ref->{'device'})      ? $ref->{'device'}      : '';
+  $out{'busnum'}      = ($ref->{'busnum'})      ? $ref->{'busnum'}      : '';
+  $out{'devnum'}      = ($ref->{'devnum'})      ? $ref->{'devnum'}      : '';
+  # USB_  map: class=driver description=product vendor_name=manufacturer vendor=idVendor device=idProduct
+  if ($out{'type'} =~ m/^USB_([\S]*)$/) {
+    $out{'sub-type'}    = $1;
+    $out{'class'}       = ($ref->{'driver'})       ? $ref->{'driver'}       : '';
+    $out{'description'} = ($ref->{'product'})      ? $ref->{'product'}      : '';
+    $out{'vendor_name'} = ($ref->{'manufacturer'}) ? $ref->{'manufacturer'} : '';
+    $out{'vendor'}      = ($ref->{'idVendor'})     ? $ref->{'idVendor'}     : '';
+    $out{'device'}      = ($ref->{'idProduct'})    ? $ref->{'idProduct'}    : '';
+    # if no 'description' get `lsusb` friendly description (example: Intel Wifi doesn't have 'product')
+    if (! $out{'description'} && $ref->{'idVendor'} && $ref->{'idProduct'}) {
+      $out{'description'} = $lsusb{"$ref->{'idVendor'}:$ref->{'idProduct'}"}{'description'}
     }
   }
-#  $rehash = " type=$ref->{-type} $rehash";
 
-  return substr($rehash,0,60);
-#  return $rehash;
+  # shorten display for default abbreviated output (limited to devices I had), add as desired
+  if (! $opt{'verbose'}) {
+    my $class = $out{'class'}; # declare these in case $out{'whatever'} is empty
+    $class =~ s/[\s](\[|\()[\S]*(\]|\))$//i; # del [stuff] | (stuff) at end, ex: "Non-Essential Instrumentation [1300]"
+    $class =~ s/[\s](bridge|compatible controller|controller|device)$//i;
+    $class =~ s/non-volatile memory$/NVME/i;
+    $class =~ s/^serial attached/SA/i;
+    $class =~ s/^non-essential //i;
+    $out{'class'} = $class;
+    my $description = $out{'description'};
+    $description =~ s/pci-express/PCIe/i;
+    $description =~ s/solid state drive/SSD/i;
+    $out{'description'} = $description;
+    my $vendor_name = $out{'vendor_name'};
+    $vendor_name =~ s/^linux[\s].*$/Linux kernel/i;
+    $vendor_name =~ s/[\s]corporation//i;
+    $vendor_name =~ s/[\s](inc\.|co\., ltd\.)$//i;
+    $vendor_name =~ s/[\s](tech\.|technology|semiconductor)$//i;
+    $vendor_name =~ s/[\s]*$//;
+    $vendor_name =~ s/^.*\[(.*)\]$/$1/; # if it has a short version already, use it
+    $out{'vendor_name'} = $vendor_name;
+    # remove '0x' from vendor & device
+    my $vendor = $out{'vendor'};
+    my $device = $out{'device'};
+    $vendor =~ s/^0x//i;
+    $device =~ s/^0x//i;
+    $out{'vendor'} = $vendor;
+    $out{'device'} = $device;
+    # only display IOMMU_group 'type'
+    $out{'type'} = ($out{'type'} eq 'PCI_slot' || $out{'type'} =~ m/^USB_/) ? '' : $out{'type'};
+    # remove PCI Domain if 0000
+    $out{'id'} =~ s/^0000://;
+  }
+
+  # format whatever we have into display strings (id in quotes to allow 0 to print)
+  $out{'type'}          = ($out{'type'})                     ? "$out{'type'}: "                     : '';
+  $out{'id'}            = "($out{'id'})"                     ? "$out{'id'}"                         : '';
+  $out{'class'}         = ($out{'class'})                    ? " <$out{'class'}>"                   : '';
+  $out{'description'}   = ($out{'description'})              ? " \"$out{'description'}\""           : '';
+  $out{'vendor_name'}   = ($out{'vendor_name'})              ? " ($out{'vendor_name'})"             : '';
+  $out{'vendor_device'} = ($out{'vendor'} && $out{'device'}) ? " [$out{'vendor'}:$out{'device'}]"   : '';
+  $out{'busnum_devnum'} = ($out{'busnum'} && $out{'devnum'}) ? " \{$out{'busnum'}:$out{'devnum'}\}" : '';
+
+  # send formatted string, anything that didn't exist is empty
+  return "$out{'type'}$out{'id'}$out{'class'}$out{'description'}$out{'vendor_name'}$out{'vendor_device'}$out{'busnum_devnum'}";
 }
 
 # SUB::expand_specific_indenting('#') - formats indenting based on default or --verbose
 #  ... called by SUB::expand_specific()
-## add '> ' for default level 0 and pad others by 2?
 sub expand_specific_indenting {
-  my $indent = ($_[0]) ? $_[0] : 0;
+  my $indent = ($_[0] > 0) ? $_[0] : 0;
   my ($indent_spaces,$indent_string,$indent_newline) = ('','','');
   if ($opt{'verbose'}) { # verbose uses minimal single space indenting
     $indent_spaces = ' ';
     $indent_string = $indent_spaces x $indent;
-    unless ($indent) { $indent_newline = "\n"; }
+    if (! $indent) { $indent_newline = "\n"; } # newline before each new IOMMU_group
   } elsif ($indent) { # default fancy indenting
 ### if going to try to get very fancy on a tree, we'd need to iterate sub-objects ahead of time in MAIN::
 ## what to know: "do we have another object in tree at this level? If not, no | needed and +- is \-"
-    $indent--;
+    if ($indent) { $indent--; }
     $indent_spaces = '│   ';
     $indent_string = '   ' . ($indent_spaces x $indent) . '╞═ ';
   } else { # default 0 indent
     $indent_string = "➤ $indent_string";
   }
-  return "$indent_newline $indent_string";
+  return "${indent_newline}${indent_string}";
 }
 
 exit;
-
