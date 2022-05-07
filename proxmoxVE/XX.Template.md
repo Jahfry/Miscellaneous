@@ -1,4 +1,4 @@
-# Proxmox VE 7.1 NAS and Gaming VMs - 0 - 
+# Proxmox VE NAS and Gaming VMs - 0 - 
 
 Future things:
 
@@ -34,7 +34,7 @@ Debian / Brave = no scrolling in drop-downs (VM add PCIE device, VM Host CPU sel
 
 
 ---
-> [^ [TOP OF PAGE](#proxmox-ve-71-nas-and-gaming-vms---06---vm-windows-10)] ... ***End:*** *Proxmox VE 7.1 NAS and Gaming VMs - VM Windows 10*
+> [^ [TOP OF PAGE](#proxmox-ve-nas-and-gaming-vms---06---vm-windows-10)] ... ***End:*** *Proxmox VE NAS and Gaming VMs - VM Windows 10*
 > 
 > \> NEXT: [0](0..md)
 >
