@@ -1,0 +1,9 @@
+**Scripts and other information I have created for Linux VFIO using qemu**
+
+* [driverctl hookscript](../proxmoxVE/hookscript-driverctl.pl)
+  * This is actually in a different subdirectory
+  * Information about how I use this is [here](../proxmoxVE/05.ProxmoxGPUPassthrough.md#05d-driverctl-hookscript)
+* [iommu_dev_tree.pl](iommu_dev_tree.pl)
+  * Displays a list of devices attached to IOMMU groups (not just PCI devices, currently shows USB, future plan is Network and Block devices)
+  * Has a number of different output options
+  * See the POD information the script (or run script like `iommu_dev_tree.pl --manual`) for documentation
