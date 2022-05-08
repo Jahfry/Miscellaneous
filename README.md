@@ -25,3 +25,17 @@ But today things are different. Why?
 * My 50+ year old brain slowing down
 
 Also has something to do with having a career in Technical Marketing / Sales Engineering / Project Management. While I'm no longer working (medical spine stuff, which contributes to memory issues) I still prefer to make everything as documented as I can. 
+
+
+---
+
+# License
+
+## Text and Markdown
+
+[![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)  
+This work is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
+
+## Program / Code
+
+Except when stated otherwise all code files are freely released under the [Unlicense](UNLICENSE), as a thank you to previous free projects.
