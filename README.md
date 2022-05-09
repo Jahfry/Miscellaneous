@@ -38,7 +38,9 @@ Except when stated otherwise within a file, all human-readable files (ie, .md Ma
 
 ## Program / Code
 
-Except when stated otherwise within a file, all machine-interpretable files are freely released under the [Unlicense](UNLICENSE), as a thank you to other free projects.
+Except when stated otherwise within a file, all machine-interpretable files are freely released under the [Unlicense](UNLICENSE). Attribution is always welcome but not required.
 
-Any code files posted here have attribution where required via comment codes. For example answers from StackExchange have links to their source. You are wholly responsible for verifying you pass attributions along in your comments to match where required. 
+This is meant as a thank you to other free projects but also to allow commercial projects to re-use easily. 
+
+***Note about re-use:*** *Any code files posted here have attribution where required via comment codes. For example answers from StackExchange have links to their source.* ***You are wholly responsible for verifying you pass attributions along in your comments to match where required.***
 
