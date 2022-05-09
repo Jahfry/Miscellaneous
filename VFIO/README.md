@@ -13,3 +13,7 @@
   * Requires:
     * Perl with these common modules: Pod::Usage, File::Basename, Cwd, Data::Dumper, utf8
     * `lspci`, `lsusb`
+
+---
+
+Licenses: See [main README.md](../README.md) for licensing information.
