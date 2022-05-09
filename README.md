@@ -39,7 +39,7 @@ Except when stated otherwise within a file, all human-readable files (ie, .md Ma
 
 ## Program / Code
 
-Except when stated otherwise within a file, fully machine-interpretable files are freely released under the [Unlicense](UNLICENSE). Attribution is always welcome but not required. 
+Except when stated otherwise within a file, fully machine-interpretable files are freely released under the [Unlicense](UNLICENSE). Attribution is always welcome but not required.  
     [[Local copy](UNLICENSE)]
 
 This is meant as a thank you to other free projects but also to allow commercial projects to re-use easily. 
