@@ -34,11 +34,13 @@ Also has something to do with having a career in Technical Marketing / Sales Eng
 ## Text and Markdown
 
 [![Creative Commons License](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)  
-Except when stated otherwise within a file, all human-readable files (ie, .md Markdown, .txt Text, etc, *even if these files contain code*) here are licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/). [[Local copy](LICENSE-cca4-sharealike)]
+Except when stated otherwise within a file, all human-readable files (ie, .md Markdown, .txt Text, etc, *even if these files contain code*) here are licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/). 
+[[Local copy](LICENSE-cca4-sharealike)]
 
 ## Program / Code
 
 Except when stated otherwise within a file, fully machine-interpretable files are freely released under the [Unlicense](UNLICENSE). Attribution is always welcome but not required.
+[[Local copy](UNLICENSE)]
 
 This is meant as a thank you to other free projects but also to allow commercial projects to re-use easily. 
 
