@@ -15,6 +15,7 @@
 #     ... 'parent_type' = name of parent hash    ^   ^   ^     ^
 #
 # Versions/Changes:
+#   * 2022.05.20-0.4-alpha ... fancy tree output
 #   * 2022.05.11-0.3-alpha ... output other tree views (by PCI, only USB/Net/Block)
 #   * 2022.05.09-0.2-alpha ... Net/Block devices added (block formatting incomplete)
 #   * 2022.05.07-0.1-alpha ... initial version with PCI/USB devices
@@ -26,8 +27,11 @@
 #
 
 # TODO:
+## Get Net working with multiple buses
+## Add experimental Thunderbolt support
+## Allow USB4 to attach to TBT devices?
 ## we have IOMMU support if /sys/class/iommu/ is populated
-# fancy tree, color?
+# color?
 # add experimental tbt (can USB attach to tbt? ugh)
 #   https://github.com/intel/thunderbolt-software-user-space/issues/24
 #   https://funnelfiasco.com/blog/2018/06/29/thinkpad-thunderbolt-dock-fedora/
