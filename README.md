@@ -2,7 +2,7 @@
 
 Notes and stuff I'm posting publicly
 
-* [Proxmox VE 7.1 NAS and Gaming VMs](proxmoxVE71/README.md) ... many pages, very verbose
+* [Proxmox VE NAS and Gaming VMs](proxmoxVE/README.md) ... many pages, very verbose
 * [TrueNAS Scale 22.02 and Passing Through a Single GPU](TrueNAS_Scale_driverctl.md) ... 1 page tech note
 
 Something to know ... I write a LOT of notes. These notes are meant to be useful for me to remember my processes perhaps years later when I have forgotten a step I took. That means these aren't *short* guides. Hopefully they will help another user with figuring out not just how to do ... but why it was done. 
