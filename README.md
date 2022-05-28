@@ -1,5 +1,7 @@
 # Miscellaneous
 
+FYI: on the road through June 2022, I'll get back and finish stuff after :)
+
 Notes and stuff I'm posting publicly
 
 * [Proxmox VE NAS and Gaming VMs](proxmoxVE/README.md) ... many pages, very verbose
