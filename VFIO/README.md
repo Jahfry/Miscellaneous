@@ -6,8 +6,9 @@
   * I wrote this for my Proxmox machine but should generically work for other qemu-based VM hosts as long as you can install `driverctl` 
     * Debian-based should "just work"
     * Other systems may need paths adjusted
-* [iommu_dev_tree.pl](iommu_dev_tree.pl)
-  * Displays a list of devices attached to IOMMU groups (not just PCI devices, currently shows USB, future plan is Network and Block devices)
+* [dev_tree.pl](dev_tree.pl)
+  * **Not in a complete state but is working**
+  * Displays a list of devices with default sort by IOMMU groups (not just PCI devices, currently shows USB, future plan is Network and Block devices)
   * Has a number of different output options
   * See the POD information the script (or run script like `iommu_dev_tree.pl --manual`) for documentation
   * Requires:
