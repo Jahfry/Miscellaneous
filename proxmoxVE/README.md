@@ -7,7 +7,7 @@
 I'm using Proxmox VE to run multiple VMs and containers. These files *should* be a log of everything I did to get my system configured. 
 
 * ***Proxmox VE versions tested:***
-    * 8.4 ... updated on 2023-12-13 to Proxmox VE 8.4 with no issues found so far, changes made in 7.1 carried through various updates
+    * 8.1.3 ... updated on 2023-12-13 to Proxmox VE 8.4 with no issues found so far, changes made in 7.1 carried through various updates
         * NOTICE: I moved back to gaming on a different machine, so I don't plan to update these docs for the forseeable future for that use case
     * ~~7.2~~ ... not yet tested, watching a couple of issues before moving to it [**updating docs for 7.2 now**]
     * 7.1 ... guide was originally started (should work mostly as-is on earlier versions)
