@@ -4,6 +4,9 @@
 #
 # Version: 20220423-1
 #
+# NOTES: 
+#    * Still working after upgrading Proxmox VE 7.4 > 8.1.3
+#
 # Purpose:
 #   * Scans VM conf file for any PCI passthrough devices
 #   * On VM start, those devices to 'vfio-pci'
