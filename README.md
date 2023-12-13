@@ -1,11 +1,9 @@
 # Miscellaneous
 
-FYI: on the road through June 2022, I'll get back and finish stuff after :)
-
 Notes and stuff I'm posting publicly
 
-* [Proxmox VE NAS and Gaming VMs](proxmoxVE/README.md) ... many pages, very verbose
-* [TrueNAS Scale 22.02 and Passing Through a Single GPU](TrueNAS_Scale_driverctl.md) ... 1 page tech note
+* [Proxmox VE NAS and Gaming VMs](proxmoxVE/README.md) ... many pages, very verbose ... updated when I need to but not actively maintained
+* [TrueNAS Scale 22.02 and Passing Through a Single GPU](TrueNAS_Scale_driverctl.md) ... 1 page tech note, likely never to be updated
 
 Something to know ... I write a LOT of notes. These notes are meant to be useful for me to remember my processes perhaps years later when I have forgotten a step I took. That means these aren't *short* guides. Hopefully they will help another user with figuring out not just how to do ... but why it was done. 
 
@@ -23,7 +21,7 @@ Something to know ... I write a LOT of notes. These notes are meant to be useful
 
 But today things are different. Why?
 
-* Watching both of my parents falling into dementia (father was a DBA and Unix toolchain coder who can barely use a web browser now)
+* Watching both of my parents falling into dementia (father was a DBA and Unix toolchain coder who could barely use a web browser before he passed)
 * My 50+ year old brain slowing down
 
 Also has something to do with having a career in Technical Marketing / Sales Engineering / Project Management. While I'm no longer working (medical spine stuff, which contributes to memory issues) I still prefer to make everything as documented as I can. 
