@@ -1,6 +1,6 @@
 # Proxmox VE NAS and Gaming VMs - README
 
-***NOTE: I no longer use my Proxmox host as a gaming VM host, leaving this all here for historical reasons***
+***NOTE: (2023-08-13) I no longer use my Proxmox host as a gaming VM host, leaving this all here for historical reasons***
 
 ## Background:
 
